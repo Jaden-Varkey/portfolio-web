@@ -1,0 +1,213 @@
+:root {
+  --bg: #06080f;
+  --ink: #f3f5f9;
+  --muted: #a9d8c8; /* soft mint — paragraph / non-heading text */
+  --line: rgba(255, 255, 255, 0.14);
+  --tile: rgba(255, 255, 255, 0.92);
+  --accent: #f5b144;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --max: 760px;
+  --pad: 24px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- CUSTOM SPACESHIP CURSOR ---------- */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 26px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.2s ease;
+}
+.cursor svg { display: block; width: 26px; height: auto; overflow: visible; }
+.has-custom-cursor .cursor { opacity: 1; }
+/* Hide the native cursor only when the custom one is active (hover devices). */
+.has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+
+.ship-body { transition: transform 0.12s ease; transform-box: fill-box; transform-origin: center; }
+.cursor--press .ship-body { transform: scale(0.86); }
+
+.flame {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: top center;
+  transform: scaleY(0.25);
+}
+.cursor--boost .flame-outer { animation: flame 0.26s ease-in-out infinite; }
+.cursor--boost .flame-inner { animation: flame 0.17s ease-in-out infinite; }
+@keyframes flame {
+  0%, 100% { opacity: 0.95; transform: scaleY(1.65) scaleX(1.62); }
+  50%      { opacity: 0.62; transform: scaleY(2.6) scaleX(1.29); }
+}
+
+::selection { background: var(--accent); color: #1a1205; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); position: relative; }
+
+.section { padding: 64px 0; }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 30px;
+}
+
+/* ---------- LOAD TRANSITION ---------- */
+.intro-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.intro-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  letter-spacing: -0.03em;
+}
+
+/* ---------- FLOATING TOP NAV ---------- */
+.floating-nav {
+  position: fixed;
+  top: 16px;
+  left: 0; right: 0;
+  margin: 0 auto;
+  width: min(680px, calc(100% - 28px));
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 12px 8px 8px;
+  background: rgba(10, 13, 22, 0.5);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-link {
+  background: none; border: none;
+  font-family: inherit; color: var(--muted);
+  font-size: 0.82rem; font-weight: 500;
+  padding: 7px 14px; border-radius: 100px;
+  transition: color 0.22s ease, background 0.22s ease;
+}
+.nav-link:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+
+/* JV monogram */
+.nav-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+    border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+.nav-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 120% at 0% 0%, rgba(245,177,68,0.18), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.nav-mark-inner {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+}
+.mono-j, .mono-v {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1;
+  -webkit-text-stroke: 0.5px rgba(231, 238, 255, 0.45); /* a touch bolder */
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+/* unified slight slant, letters just kissing — clearly a J and a V */
+.mono-j { transform: rotate(-7deg); transform-origin: bottom center; }
+.mono-v { transform: rotate(-7deg); transform-origin: bottom center; margin-left: -0.04em; }
+.nav-mark:hover .mono-j { transform: rotate(-11deg) translateY(-1px); }
+.nav-mark:hover .mono-v { transform: rotate(-11deg) translateY(-1px) translateX(1px); }
+.nav-mark:hover {
+  transform: rotate(-8deg) scale(1.07);
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+}
+.nav-mark:hover::before { opacity: 1; }
+
+@media (max-width: 540px) {
+  .floating-nav { padding: 8px 10px; width: min(440px, calc(100% - 24px)); }
+}
+
+/* ---------- ANIMATED LIGHT-HUE TEXT (key words) ---------- */
+.gradient-text {
+  background-image: linear-gradient(
+    100deg,
+    #bfe0ff, #d7c8ff, #ffc9e1, #ffe3bd, #c8f3e2, #bfe0ff
+  );
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hueShift 9s linear infinite;
+}
+@keyframes hueShift { to { background-position: 280% 50%; } }
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text { animation: none; }
+}
+
+.link-underline { position: relative; transition: color 0.25s ease; }
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.link-underline:hover { color: var(--accent); }
+.link-underline:hover::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

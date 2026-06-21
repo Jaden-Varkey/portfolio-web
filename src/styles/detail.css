@@ -1,0 +1,102 @@
+.detail { padding: 48px 0 80px; }
+
+.back {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 44px;
+}
+
+.detail-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.detail-subtitle { color: var(--muted); font-size: 1.1rem; margin-top: 10px; }
+
+.detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 36px; }
+.detail-tag {
+  font-size: 0.74rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 4px 11px;
+}
+
+.detail-gallery {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  margin-bottom: 44px;
+  scrollbar-width: thin;
+  scroll-snap-type: x mandatory;
+}
+.detail-gallery img {
+  height: 300px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+.detail-lead {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 3.4vw, 1.6rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin-bottom: 44px;
+}
+
+.detail-block { margin-bottom: 30px; max-width: 60ch; }
+.detail-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+.detail-body { color: var(--muted); line-height: 1.75; }
+
+.detail-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 36px 0;
+}
+.feature {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px 22px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(6px);
+  transition: border-color 0.25s ease;
+}
+.feature:hover { border-color: var(--accent); }
+.feature-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.02rem;
+  margin-bottom: 6px;
+}
+.feature-body { color: var(--muted); font-size: 0.96rem; line-height: 1.65; }
+
+.detail-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 44px; }
+.detail-btn {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  padding: 11px 22px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.detail-btn:hover { background: var(--ink); color: var(--bg); }
+
+@media (max-width: 600px) {
+  .detail-gallery img { height: 220px; }
+}

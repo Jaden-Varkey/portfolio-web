@@ -1,0 +1,177 @@
+/* ---------- BACKGROUND (fixed parallax + veil) ---------- */
+.bg-fixed {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bg);
+}
+.bg-image {
+  position: absolute;
+  inset: -8%;
+  background-position: center;
+  background-size: cover;
+  will-change: transform;
+}
+.bg-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 70% 10%, rgba(6,8,15,0) 0%, rgba(6,8,15,0.55) 55%, rgba(6,8,15,0.92) 100%),
+    linear-gradient(180deg, rgba(6,8,15,0.25) 0%, rgba(6,8,15,0.85) 100%);
+}
+.bg-grain {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(100% 60% at 50% 0%, rgba(245,177,68,0.06), transparent 60%);
+  pointer-events: none;
+}
+
+/* ---------- LOGOS (transparent, bare) ---------- */
+.logo-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5));
+}
+.logo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.hero-inner { width: 100%; }
+.hero-hi { font-size: 0.95rem; color: var(--muted); margin-bottom: 10px; }
+.hero-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 12vw, 6.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  margin-bottom: 22px;
+  text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+}
+.hero-intro {
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  color: var(--muted);
+  max-width: 32ch;
+  margin: 0 auto 36px;
+}
+.hero-socials { display: flex; justify-content: center; gap: 28px; }
+.social-link { display: inline-block; }
+.social-tile { width: 32px; height: 32px; }
+.social-tile.sm { width: 26px; height: 26px; }
+.social-link:hover .logo-tile { transform: translateY(-4px) scale(1.1); }
+
+/* ---------- SHARED CURSOR PREVIEW ---------- */
+.cursor-preview {
+  position: fixed;
+  top: 0; left: 0;
+  width: 240px;
+  height: 156px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform;
+}
+
+/* ---------- PROJECTS ---------- */
+.proj-list { list-style: none; display: flex; flex-direction: column; }
+.proj-item { border-top: 1px solid var(--line); }
+.proj-item:last-child { border-bottom: 1px solid var(--line); }
+.proj-row { display: block; padding: 30px 4px; transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1); }
+.proj-row.is-link:hover { padding-left: 14px; }
+.proj-head { display: flex; align-items: center; gap: 12px; }
+.proj-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 5.5vw, 2.7rem);
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+}
+.proj-arrow { font-size: 1.3rem; color: var(--muted); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease; }
+.proj-row.is-link:hover .proj-arrow { transform: translate(5px,-5px); color: var(--accent); }
+.proj-row.is-link:hover .proj-name { color: var(--accent); }
+.proj-blurb { color: var(--muted); margin: 10px 0 14px; max-width: 52ch; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.proj-tag { font-size: 0.74rem; color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 4px 11px; }
+.proj-thumb-inline { display: none; }
+
+/* ---------- EXPERIENCE ---------- */
+.exp-list { display: flex; flex-direction: column; gap: 30px; }
+.exp-row { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
+.exp-company { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; letter-spacing: -0.01em; }
+.exp-role { color: var(--accent); font-size: 0.92rem; font-weight: 500; margin: 3px 0 8px; }
+.exp-line { color: var(--muted); font-size: 0.98rem; max-width: 50ch; }
+.exp-aside { flex-shrink: 0; text-align: right; }
+.exp-date { display: block; font-size: 0.82rem; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.exp-loc { display: block; font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+.exp-thumb-inline { display: none; }
+
+/* ---------- TECH MARQUEE ---------- */
+.tech-section { padding-bottom: 80px; overflow: hidden; }
+.tech-rows { display: flex; flex-direction: column; gap: 30px; margin-top: 6px; }
+.tech-cat {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.marquee-track {
+  list-style: none;
+  display: flex;
+  width: max-content;
+  animation: marquee var(--dur, 30s) linear infinite;
+  will-change: transform;
+}
+.marquee-track.to-right { animation-direction: reverse; }
+.marquee-item { flex: 0 0 auto; margin-right: 46px; }
+.tech-logo { width: 46px; height: 46px; }
+.marquee-item:hover .logo-tile { transform: scale(1.16); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- FOOTER ---------- */
+.footer { padding: 36px 0 56px; border-top: 1px solid var(--line); }
+.footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.footer-name { font-family: var(--font-display); font-weight: 500; }
+.footer-socials { display: flex; gap: 12px; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (hover: none), (max-width: 720px) {
+  .cursor-preview { display: none; }
+  .proj-thumb-inline, .exp-thumb-inline {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+}
+@media (max-width: 600px) {
+  .exp-row { flex-direction: column; gap: 6px; }
+  .exp-aside { text-align: left; order: -1; }
+  .tech-cloud { gap: 20px 16px; }
+  .tech-tile { width: 50px; height: 50px; }
+}
