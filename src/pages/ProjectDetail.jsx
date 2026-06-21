@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { projectDetails } from '../data/content.js'
 import Background from '../components/Background.jsx'
+import { asset } from '../lib/asset.js'
 import '../styles/detail.css'
 
 const fade = {
@@ -36,7 +37,7 @@ export default function ProjectDetail() {
 
         <motion.div className="detail-gallery" variants={fade} custom={3} initial="hidden" animate="show">
           {p.images.map((img) => (
-            <img key={img} src={img} alt={`${p.name} screenshot`} loading="lazy" />
+            <img key={img} src={asset(img)} alt={`${p.name} screenshot`} loading="lazy" />
           ))}
         </motion.div>
 

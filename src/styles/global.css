@@ -173,9 +173,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- ANIMATED LIGHT-HUE TEXT (key words) ---------- */
 .gradient-text {
+  /* light multicolor, intentionally no green so titles stay distinct from body text */
   background-image: linear-gradient(
     100deg,
-    #bfe0ff, #d7c8ff, #ffc9e1, #ffe3bd, #c8f3e2, #bfe0ff
+    #bfe0ff, #d7c8ff, #ffc9e1, #ffd0b8, #bfe0ff
   );
   background-size: 280% 100%;
   -webkit-background-clip: text;

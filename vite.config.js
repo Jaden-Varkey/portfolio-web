@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// base: './' keeps asset paths relative so the build works on GitHub Pages
-// (project subpath) and on a custom domain without changes.
+// base: '/' for clean URLs with BrowserRouter on Netlify (served at domain root).
+// Asset references use import.meta.env.BASE_URL so deep routes resolve correctly.
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/',
 })

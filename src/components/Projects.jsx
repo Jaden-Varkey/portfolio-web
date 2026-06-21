@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/content.js'
+import { asset } from '../lib/asset.js'
 
 export default function Projects() {
   const [active, setActive] = useState(null) // index being hovered
@@ -46,7 +47,7 @@ export default function Projects() {
                     {p.tags.map((t) => <span key={t} className="proj-tag">{t}</span>)}
                   </div>
                   {/* Inline thumbnail — shown only on touch / small screens. */}
-                  <img className="proj-thumb-inline" src={p.thumb} alt={p.name} loading="lazy" />
+                  <img className="proj-thumb-inline" src={asset(p.thumb)} alt={p.name} loading="lazy" />
                 </Row>
               </motion.li>
             )
@@ -60,7 +61,7 @@ export default function Projects() {
           <motion.img
             key={active}
             className="cursor-preview"
-            src={projects[active].thumb}
+            src={asset(projects[active].thumb)}
             alt=""
             aria-hidden
             style={{ x, y }}

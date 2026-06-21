@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import { experience } from '../data/content.js'
+import { asset } from '../lib/asset.js'
 
 export default function Experience() {
   const [preview, setPreview] = useState(null)
@@ -30,7 +31,7 @@ export default function Experience() {
                 <h3 className="exp-company gradient-text">{e.company}</h3>
                 <p className="exp-role">{e.role}</p>
                 <p className="exp-line">{e.line}</p>
-                {e.thumb && <img className="exp-thumb-inline" src={e.thumb} alt={e.company} loading="lazy" />}
+                {e.thumb && <img className="exp-thumb-inline" src={asset(e.thumb)} alt={e.company} loading="lazy" />}
               </div>
               <div className="exp-aside">
                 <span className="exp-date">{e.date}</span>
@@ -46,7 +47,7 @@ export default function Experience() {
           <motion.img
             key={preview}
             className="cursor-preview"
-            src={preview}
+            src={asset(preview)}
             alt=""
             aria-hidden
             style={{ x, y }}
