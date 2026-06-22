@@ -105,7 +105,7 @@ export const projectDetails = {
   boilersub: {
     name: 'BoilerSub',
     subtitle: 'Purdue-Exclusive Student Subleasing Marketplace',
-    meta: ['Co-Founder', 'Backend / Full-Stack', 'Spring 2026', 'Supabase', 'OTP', '3D Panorama', 'Live Chat'],
+    meta: ['Backend / Full-Stack', 'Supabase', 'OTP', '3D Panorama', 'Live Chat'],
     images: ['boilersub2.png', 'boilersub3.png', 'boilersub1.png'],
     links: [{ label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/BoilerSub' }],
     lead: 'No more Facebook groups, Snapchat stories, or DMing strangers for lease details. Just a clean, verified, Purdue-only platform.',
@@ -130,7 +130,7 @@ export const projectDetails = {
   'nova-cua': {
     name: 'Nova-CUA',
     subtitle: 'Multi-Agent Desktop Automation System',
-    meta: ['Team of 3', 'LLMs', 'GUI Grounding', 'Docker'],
+    meta: ['AI Orchestration', 'LLMs', 'GUI Grounding', 'Docker'],
     images: ['nova1.png', 'nova2.png'],
     links: [
       { label: 'Live Preview', href: 'https://www.youtube.com/watch?v=IIIbjWweYmI' },
@@ -140,7 +140,7 @@ export const projectDetails = {
     sections: [
       {
         heading: 'The Idea',
-        body: '"Open LinkedIn and save ML internships." "Buy me the latest AirPods on Amazon." "Play Barcelona’s match highlights." Nova-CUA is a JARVIS-like desktop agent that interprets instructions, plans, and operates your desktop to carry them out — built with Archeet Shah and Peter Bui.',
+        body: '"Open LinkedIn and save ML internships." "Buy me the latest AirPods on Amazon." "Play Barcelona’s match highlights." Nova-CUA is a JARVIS-like desktop agent that interprets instructions, plans, and operates your desktop to carry them out.',
       },
       {
         heading: 'How it works',

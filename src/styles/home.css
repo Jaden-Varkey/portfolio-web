@@ -26,6 +26,42 @@
   background: radial-gradient(100% 60% at 50% 0%, rgba(245,177,68,0.06), transparent 60%);
   pointer-events: none;
 }
+.starfield {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* Hyperspace-style light streaks that flash on each section snap. Concentrated
+   toward the periphery so the centre text stays readable, but bright enough to
+   read as a quick warp burst. */
+.bg-warp {
+  position: absolute;
+  inset: -35%;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 20px,
+    rgba(222, 238, 255, 0) 20px,
+    rgba(222, 238, 255, 0.95) 22px,
+    rgba(170, 208, 255, 0) 24px,
+    transparent 24px 46px
+  );
+  -webkit-mask-image: radial-gradient(88% 100% at 50% 50%, transparent 26%, #000 78%);
+  mask-image: radial-gradient(88% 100% at 50% 50%, transparent 26%, #000 78%);
+  filter: blur(0.7px) brightness(1.5);
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: warpFlash 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes warpFlash {
+  0%   { opacity: 0;    transform: scaleY(1.2); }
+  14%  { opacity: 0.95; transform: scaleY(1.6); }
+  40%  { opacity: 0.95; transform: scaleY(2.2); }
+  100% { opacity: 0;    transform: scaleY(3.6); }
+}
+@media (prefers-reduced-motion: reduce) { .bg-warp { display: none; } }
 
 /* ---------- LOGOS (transparent, bare) ---------- */
 .logo-tile {
@@ -76,7 +112,7 @@
 .social-tile.sm { width: 26px; height: 26px; }
 .social-link:hover .logo-tile { transform: translateY(-4px) scale(1.1); }
 
-/* ---------- SHARED CURSOR PREVIEW ---------- */
+/* ---------- SHARED CURSOR PREVIEW (experience) ---------- */
 .cursor-preview {
   position: fixed;
   top: 0; left: 0;
@@ -91,11 +127,43 @@
   will-change: transform;
 }
 
+/* ---------- SIDE PREVIEW (projects) ---------- */
+.side-preview {
+  position: fixed;
+  right: 40px;
+  top: 50%;
+  width: clamp(280px, 30vw, 420px);
+  height: clamp(190px, 20vw, 280px);
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  pointer-events: none;
+  z-index: 50;
+  will-change: transform, opacity;
+}
+/* Hide the side preview where there's no hover or not enough room. */
+@media (hover: none), (max-width: 1024px) {
+  .side-preview { display: none; }
+}
+
 /* ---------- PROJECTS ---------- */
 .proj-list { list-style: none; display: flex; flex-direction: column; }
 .proj-item { border-top: 1px solid var(--line); }
 .proj-item:last-child { border-bottom: 1px solid var(--line); }
-.proj-row { display: block; padding: 30px 4px; transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1); }
+.proj-row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  padding: 30px 4px;
+  transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+button.proj-row.is-link { cursor: pointer; }
 .proj-row.is-link:hover { padding-left: 14px; }
 .proj-head { display: flex; align-items: center; gap: 12px; }
 .proj-name {

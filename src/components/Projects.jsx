@@ -1,31 +1,23 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/content.js'
 import { asset } from '../lib/asset.js'
+import ProjectModal from './ProjectModal.jsx'
 
 export default function Projects() {
   const [active, setActive] = useState(null) // index being hovered
-
-  // Floating preview follows the cursor (desktop only, pointer: fine).
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const x = useSpring(mx, { stiffness: 350, damping: 30, mass: 0.6 })
-  const y = useSpring(my, { stiffness: 350, damping: 30, mass: 0.6 })
-
-  const handleMove = (e) => {
-    mx.set(e.clientX + 24)
-    my.set(e.clientY - 90)
-  }
+  const [openSlug, setOpenSlug] = useState(null) // project shown in the modal
 
   return (
-    <section className="section" id="projects" onMouseMove={handleMove}>
+    <section className="section" id="projects">
       <div className="wrap">
         <p className="eyebrow">Projects</p>
         <ul className="proj-list">
           {projects.map((p, i) => {
-            const Row = p.slug ? Link : 'div'
-            const rowProps = p.slug ? { to: `/projects/${p.slug}` } : {}
+            const Row = p.slug ? 'button' : 'div'
+            const rowProps = p.slug
+              ? { type: 'button', onClick: () => setOpenSlug(p.slug) }
+              : {}
             return (
               <motion.li
                 key={p.name}
@@ -55,23 +47,24 @@ export default function Projects() {
         </ul>
       </div>
 
-      {/* Floating cursor preview (desktop). */}
+      {/* Hover preview, parked on the right side of the screen (desktop). */}
       <AnimatePresence>
         {active !== null && (
           <motion.img
             key={active}
-            className="cursor-preview"
+            className="side-preview"
             src={asset(projects[active].thumb)}
             alt=""
             aria-hidden
-            style={{ x, y }}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
+            initial={{ opacity: 0, x: 40, y: '-50%' }}
+            animate={{ opacity: 1, x: 0, y: '-50%' }}
+            exit={{ opacity: 0, x: 40, y: '-50%' }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           />
         )}
       </AnimatePresence>
+
+      <ProjectModal slug={openSlug} onClose={() => setOpenSlug(null)} />
     </section>
   )
 }

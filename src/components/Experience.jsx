@@ -1,18 +1,13 @@
 import { useState } from 'react'
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { experience } from '../data/content.js'
 import { asset } from '../lib/asset.js'
 
 export default function Experience() {
   const [preview, setPreview] = useState(null)
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const x = useSpring(mx, { stiffness: 350, damping: 30, mass: 0.6 })
-  const y = useSpring(my, { stiffness: 350, damping: 30, mass: 0.6 })
-  const handleMove = (ev) => { mx.set(ev.clientX + 24); my.set(ev.clientY - 90) }
 
   return (
-    <section className="section" id="experience" onMouseMove={handleMove}>
+    <section className="section" id="experience">
       <div className="wrap">
         <p className="eyebrow">Experience</p>
         <div className="exp-list">
@@ -46,15 +41,14 @@ export default function Experience() {
         {preview && (
           <motion.img
             key={preview}
-            className="cursor-preview"
+            className="side-preview"
             src={asset(preview)}
             alt=""
             aria-hidden
-            style={{ x, y }}
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.92 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
+            initial={{ opacity: 0, x: 40, y: '-50%' }}
+            animate={{ opacity: 1, x: 0, y: '-50%' }}
+            exit={{ opacity: 0, x: 40, y: '-50%' }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
           />
         )}
       </AnimatePresence>

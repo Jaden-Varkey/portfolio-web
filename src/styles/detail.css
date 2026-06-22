@@ -100,3 +100,213 @@
 @media (max-width: 600px) {
   .detail-gallery img { height: 220px; }
 }
+
+/* ---------- IN-PAGE PROJECT CAPSULE (mission dossier) ---------- */
+.pm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background:
+    radial-gradient(90% 80% at 18% 100%, rgba(40, 70, 130, 0.28), transparent 55%),
+    rgba(3, 5, 11, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+/* the launch wrapper: anchored bottom-left, slides up from below the page */
+.pm-launch {
+  position: fixed;
+  left: clamp(16px, 3vw, 44px);
+  bottom: 0;
+  z-index: 2001;
+  width: clamp(330px, 33vw, 440px);
+  max-width: calc(100vw - 32px);
+  will-change: transform;
+}
+/* engine exhaust trailing beneath the capsule during launch */
+.pm-exhaust {
+  position: absolute;
+  left: 50%;
+  bottom: -34px;
+  width: 58%;
+  height: 120px;
+  pointer-events: none;
+  transform-origin: top center;
+  background: radial-gradient(50% 100% at 50% 0%, rgba(255, 214, 130, 0.95), rgba(255, 120, 40, 0.55) 38%, transparent 74%);
+  filter: blur(3px);
+  animation: launchBurn 0.95s ease-out forwards;
+}
+@keyframes launchBurn {
+  0%   { opacity: 0.95; transform: translateX(-50%) scaleY(1.5); }
+  60%  { opacity: 0.7;  transform: translateX(-50%) scaleY(1.0); }
+  100% { opacity: 0;    transform: translateX(-50%) scaleY(0.2); }
+}
+/* flared base skirt (heat-shield) — sits behind the hull, wider at the bottom */
+.pm-skirt {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 116%;
+  height: 50px;
+  z-index: 0;
+  pointer-events: none;
+  clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, #b3bbc9 0%, #767f90 55%, #4f5766 100%);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+/* the white capsule hull */
+.pm-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  /* capsule silhouette: domed nose, hull, rounded base */
+  border-radius: 48% 48% 24px 24px / 92px 92px 24px 24px;
+  background: linear-gradient(180deg, #f2f4f9 0%, #e4e8f0 52%, #ccd2de 100%);
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.62),
+    0 0 54px rgba(150, 184, 244, 0.22);
+}
+/* cylindrical shading on the hull sides for a metal-volume look */
+.pm-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    rgba(20, 30, 50, 0.14), transparent 16%, transparent 84%, rgba(20, 30, 50, 0.16));
+}
+/* hull rivet seams down each side */
+.pm-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(20, 30, 45, 0.3) 1px, transparent 1.5px) left 11px top 104px / 7px 24px repeat-y,
+    radial-gradient(circle, rgba(20, 30, 45, 0.3) 1px, transparent 1.5px) right 11px top 104px / 7px 24px repeat-y;
+}
+/* domed nose with a porthole window */
+.pm-nose {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  height: 84px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(80% 120% at 50% 0%, rgba(255, 255, 255, 0.7), transparent 62%);
+}
+.pm-porthole {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 34%, rgba(255, 255, 255, 0.6), transparent 42%),
+    radial-gradient(circle at 60% 65%, #21345c, #0a1226 75%);
+  border: 3px solid #aeb6c6;
+  box-shadow:
+    inset 0 4px 10px rgba(0, 0, 0, 0.55),
+    0 0 16px rgba(90, 140, 230, 0.35);
+}
+/* control strip below the nose */
+.pm-head {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px clamp(18px, 4vw, 26px);
+  border-top: 1px solid rgba(20, 30, 45, 0.12);
+  border-bottom: 1px solid rgba(20, 30, 45, 0.12);
+  background: linear-gradient(180deg, #e9edf4, #d6dce7);
+}
+.pm-lights { display: inline-flex; gap: 6px; }
+.pm-lights i {
+  width: 9px; height: 9px; border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+.pm-lights i:nth-child(1) { background: #ff6f5e; color: #ff6f5e; }
+.pm-lights i:nth-child(2) { background: #f0a92c; color: #f0a92c; }
+.pm-lights i:nth-child(3) { background: #34b56a; color: #34b56a; animation: pmBlink 2.4s ease-in-out infinite; }
+@keyframes pmBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.pm-label {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #4a5468;
+}
+.pm-close {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: #1c2738;
+  background: rgba(20, 30, 45, 0.06);
+  border: 1px solid rgba(20, 30, 45, 0.25);
+  border-radius: 50%;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.25s ease;
+}
+.pm-close:hover {
+  background: #ff6f5e;
+  border-color: #ff6f5e;
+  color: #fff;
+  transform: rotate(90deg);
+}
+/* scrollable dossier body */
+.pm-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 22px clamp(20px, 4vw, 30px) 26px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 30, 45, 0.3) transparent;
+}
+.pm-body::-webkit-scrollbar { width: 8px; }
+.pm-body::-webkit-scrollbar-thumb { background: rgba(20, 30, 45, 0.22); border-radius: 4px; }
+
+/* compact + dark-on-white theming of the dossier inside the capsule */
+.pm-panel .detail-title {
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  background: none;
+  -webkit-text-fill-color: #16202e;
+  color: #16202e;
+}
+.pm-panel .detail-subtitle { font-size: 0.95rem; margin-top: 6px; color: #57617a; }
+.pm-panel .detail-meta { margin: 14px 0 16px; gap: 6px; }
+.pm-panel .detail-tag { color: #4f5a70; border-color: rgba(20, 30, 45, 0.2); }
+.pm-panel .detail-gallery { margin-bottom: 18px; }
+.pm-panel .detail-gallery img { height: 132px; border-color: rgba(20, 30, 45, 0.18); }
+.pm-panel .detail-lead { font-size: 1.05rem; line-height: 1.35; margin-bottom: 16px; padding-left: 14px; color: #1d2736; border-left-color: #e08a2e; }
+.pm-panel .detail-block { margin-bottom: 14px; max-width: none; }
+.pm-panel .detail-heading { font-size: 1.1rem; margin-bottom: 6px; color: #16202e; }
+.pm-panel .detail-body { font-size: 0.92rem; line-height: 1.55; color: #46506a; }
+.pm-panel .detail-features { gap: 10px; margin: 16px 0; }
+.pm-panel .feature { padding: 11px 14px; background: rgba(20, 30, 50, 0.05); border-color: rgba(20, 30, 45, 0.14); backdrop-filter: none; }
+.pm-panel .feature:hover { border-color: #e08a2e; }
+.pm-panel .feature-title { font-size: 0.95rem; color: #16202e; }
+.pm-panel .feature-body { font-size: 0.88rem; line-height: 1.5; color: #46506a; }
+.pm-panel .detail-links { margin-top: 18px; }
+.pm-panel .detail-btn { padding: 9px 18px; font-size: 0.9rem; border-color: #1c2738; color: #1c2738; }
+.pm-panel .detail-btn:hover { background: #1c2738; color: #eef1f7; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-lights i:nth-child(3) { animation: none; }
+  .pm-exhaust { display: none; }
+}
+/* on small screens, let the capsule span the width comfortably */
+@media (max-width: 540px) {
+  .pm-launch { left: 16px; right: 16px; width: auto; }
+}
