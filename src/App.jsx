@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import Home from './pages/Home.jsx'
 import ProjectDetail from './pages/ProjectDetail.jsx'
 import Cursor from './components/Cursor.jsx'
-import Spotlight from './components/Spotlight.jsx'
+import CursorTrail from './components/CursorTrail.jsx'
 import PageIntro from './components/PageIntro.jsx'
 import FloatingNav from './components/FloatingNav.jsx'
 
@@ -25,7 +25,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/projects/:slug" element={<ProjectDetail />} />
       </Routes>
-      <Spotlight />
+      <CursorTrail />
     </>
   )
 }
