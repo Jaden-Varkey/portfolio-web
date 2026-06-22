@@ -94,7 +94,6 @@ export const techStack = [
       { key: 'docker', label: 'Docker' },
       { key: 'vercel', label: 'Vercel', file: 'vercel.png' },
       { key: 'claude', label: 'Claude' },
-      { key: 'gemini', label: 'Gemini' },
       { key: 'antigravity', label: 'Antigravity' },
       { key: 'ibm', label: 'IBM' },
     ],
