@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { techStack } from '../data/content.js'
 import LogoTile from './LogoTile.jsx'
 
@@ -48,12 +49,19 @@ export default function TechStack() {
       </div>
       <div className="tech-rows">
         {techStack.map((cat, i) => (
-          <div className="tech-group" key={cat.label}>
+          <motion.div
+            className="tech-group"
+            key={cat.label}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 }}
+          >
             <div className="wrap">
               <p className="tech-cat">{cat.label}</p>
             </div>
             <Marquee items={cat.items} toRight={i % 2 === 0} />
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

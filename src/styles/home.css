@@ -47,10 +47,11 @@
 
 /* ---------- HERO ---------- */
 .hero {
-  min-height: 92vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   text-align: center;
+  scroll-snap-align: center;
 }
 .hero-inner { width: 100%; }
 .hero-hi { font-size: 0.95rem; color: var(--muted); margin-bottom: 10px; }
@@ -153,7 +154,7 @@
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- FOOTER ---------- */
-.footer { padding: 36px 0 56px; border-top: 1px solid var(--line); }
+.footer { padding: 36px 0 56px; border-top: 1px solid var(--line); scroll-snap-align: end; }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .footer-name { font-family: var(--font-display); font-weight: 500; }
 .footer-socials { display: flex; gap: 12px; }
