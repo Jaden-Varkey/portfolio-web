@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 // Each star eases toward the one ahead of it (a "follow the leader" chain), so
 // they spread out into a tail while moving and gather when still. The head
 // chases the pointer. Transform/opacity only (GPU), disabled on touch.
-const COUNT = 6
+const COUNT = 8
 
 export default function CursorTrail() {
   const refs = useRef([])
@@ -25,10 +25,10 @@ export default function CursorTrail() {
       let py = ty
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i]
-        p.x += (px - p.x) * 0.34 // ease toward the star ahead -> trailing tail
-        p.y += (py - p.y) * 0.34
+        p.x += (px - p.x) * 0.24 // ease toward the star ahead -> longer trailing tail
+        p.y += (py - p.y) * 0.24
         const scale = 1 - (i / (COUNT + 1)) // stars shrink toward the tail
-        els[i].style.transform = `translate3d(${p.x - 8}px, ${p.y - 8}px, 0) scale(${scale})`
+        els[i].style.transform = `translate3d(${p.x - 10}px, ${p.y - 10}px, 0) scale(${scale})`
         px = p.x
         py = p.y
       }
