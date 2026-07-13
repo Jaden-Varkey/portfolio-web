@@ -13,8 +13,10 @@ export default function ProjectDetailContent({ p }) {
       </div>
 
       <div className="detail-gallery">
+        {/* eager: lazy-loading defers the offscreen slides of this horizontal
+            scroller, leaving them blank when the gallery is first revealed */}
         {p.images.map((img) => (
-          <img key={img} src={asset(img)} alt={`${p.name} screenshot`} loading="lazy" />
+          <img key={img} src={asset(img)} alt={`${p.name} screenshot`} />
         ))}
       </div>
 

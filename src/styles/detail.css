@@ -101,7 +101,12 @@
   .detail-gallery img { height: 220px; }
 }
 
-/* ---------- IN-PAGE PROJECT CAPSULE (mission dossier) ---------- */
+/* ---------- IN-PAGE PROJECT SHUTTLE (mission dossier) ----------
+   The craft streaks in from the bottom-right like a shooting star, grows as
+   it approaches, and hovers over its pad (bottom-left) with engines idling;
+   dismissing it launches it up and out of the screen. `.is-flying` (arriving
+   or leaving) runs the engines at full burn; `.is-docked` throttles them to
+   a short idle flame and bobs the craft gently. */
 .pm-overlay {
   position: fixed;
   inset: 0;
@@ -112,67 +117,103 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
-/* the launch wrapper: anchored bottom-left, slides up from below the page */
+/* flight wrapper: framer-motion drives its transform (position is the pad).
+   The pad floats above the bottom edge so the idle flames stay in view. */
 .pm-launch {
   position: fixed;
   left: clamp(16px, 3vw, 44px);
-  bottom: 0;
+  bottom: clamp(84px, 12vh, 128px);
   z-index: 2001;
-  width: clamp(330px, 33vw, 440px);
+  width: clamp(300px, 29vw, 400px);
   max-width: calc(100vw - 32px);
   will-change: transform;
 }
-/* engine exhaust trailing beneath the capsule during launch */
-.pm-exhaust {
-  position: absolute;
-  left: 50%;
-  bottom: -34px;
-  width: 58%;
-  height: 120px;
-  pointer-events: none;
-  transform-origin: top center;
-  background: radial-gradient(50% 100% at 50% 0%, rgba(255, 214, 130, 0.95), rgba(255, 120, 40, 0.55) 38%, transparent 74%);
-  filter: blur(3px);
-  animation: launchBurn 0.95s ease-out forwards;
+/* the orbiter itself: fuselage column + aft engine section, wings/fin behind */
+.pm-craft {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 76vh;
 }
-@keyframes launchBurn {
-  0%   { opacity: 0.95; transform: translateX(-50%) scaleY(1.5); }
-  60%  { opacity: 0.7;  transform: translateX(-50%) scaleY(1.0); }
-  100% { opacity: 0;    transform: translateX(-50%) scaleY(0.2); }
+/* touchdown compression, then a slight perpetual hover-bounce on the burn */
+.pm-launch.is-docked .pm-craft {
+  animation: pmSettle 0.5s ease-out, pmHover 3.8s ease-in-out 0.5s infinite;
 }
-/* flared base skirt (heat-shield) — sits behind the hull, wider at the bottom */
-.pm-skirt {
+@keyframes pmSettle {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(6px); }
+  75% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+@keyframes pmHover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+/* vertical stabilizer peeking above the nose */
+.pm-fin {
   position: absolute;
+  top: -32px;
   left: 50%;
-  bottom: -2px;
   transform: translateX(-50%);
-  width: 116%;
-  height: 50px;
+  width: 56px;
+  height: 72px;
   z-index: 0;
   pointer-events: none;
-  clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%);
-  background: linear-gradient(180deg, #b3bbc9 0%, #767f90 55%, #4f5766 100%);
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+  clip-path: polygon(40% 0, 60% 0, 88% 100%, 12% 100%);
+  background: linear-gradient(180deg, #454d5e, #262c3a);
 }
-/* the white capsule hull */
+/* delta wings flaring out from the lower fuselage; the dark base layer shows
+   along the swept edge as the wing's black leading edge */
+.pm-wing {
+  position: absolute;
+  bottom: 46px;
+  width: 84px;
+  height: 168px;
+  z-index: 0;
+  pointer-events: none;
+  background: #232936;
+}
+.pm-wing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.pm-wing-l {
+  right: calc(100% - 14px);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.pm-wing-l::before {
+  clip-path: polygon(100% 8%, 100% 100%, 10% 100%);
+  background: linear-gradient(225deg, #e8ecf4 0%, #c7cedb 70%, #aab2c2 100%);
+}
+.pm-wing-r {
+  left: calc(100% - 14px);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+.pm-wing-r::before {
+  clip-path: polygon(0 8%, 90% 100%, 0 100%);
+  background: linear-gradient(135deg, #e8ecf4 0%, #c7cedb 70%, #aab2c2 100%);
+}
+/* the white fuselage */
 .pm-panel {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-height: 92vh;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  /* capsule silhouette: domed nose, hull, rounded base */
-  border-radius: 48% 48% 24px 24px / 92px 92px 24px 24px;
-  background: linear-gradient(180deg, #f2f4f9 0%, #e4e8f0 52%, #ccd2de 100%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  /* orbiter silhouette: rounded nose, straight hull */
+  border-radius: 50% 50% 20px 20px / 100px 100px 20px 20px;
+  background: linear-gradient(180deg, #f8fafd 0%, #eef1f7 55%, #dde2ec 100%);
   box-shadow:
-    0 40px 120px rgba(0, 0, 0, 0.62),
-    0 0 54px rgba(150, 184, 244, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 40px 120px rgba(0, 0, 0, 0.55),
+    0 0 60px rgba(150, 184, 244, 0.25);
 }
-/* cylindrical shading on the hull sides for a metal-volume look */
+/* soft cylindrical shading on the hull sides — clean, unpatterned shell */
 .pm-panel::before {
   content: '';
   position: absolute;
@@ -180,39 +221,33 @@
   border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(90deg,
-    rgba(20, 30, 50, 0.14), transparent 16%, transparent 84%, rgba(20, 30, 50, 0.16));
+    rgba(20, 30, 50, 0.1), transparent 18%, transparent 82%, rgba(20, 30, 50, 0.12));
 }
-/* hull rivet seams down each side */
-.pm-frame {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    radial-gradient(circle, rgba(20, 30, 45, 0.3) 1px, transparent 1.5px) left 11px top 104px / 7px 24px repeat-y,
-    radial-gradient(circle, rgba(20, 30, 45, 0.3) 1px, transparent 1.5px) right 11px top 104px / 7px 24px repeat-y;
-}
-/* domed nose with a porthole window */
+/* black RCC nose cap with the cockpit window strip */
 .pm-nose {
   position: relative;
   z-index: 1;
   flex: none;
-  height: 84px;
+  height: 88px;
   display: grid;
   place-items: center;
-  background: radial-gradient(80% 120% at 50% 0%, rgba(255, 255, 255, 0.7), transparent 62%);
-}
-.pm-porthole {
-  width: 46px; height: 46px;
-  border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 34%, rgba(255, 255, 255, 0.6), transparent 42%),
-    radial-gradient(circle at 60% 65%, #21345c, #0a1226 75%);
-  border: 3px solid #aeb6c6;
-  box-shadow:
-    inset 0 4px 10px rgba(0, 0, 0, 0.55),
-    0 0 16px rgba(90, 140, 230, 0.35);
+    radial-gradient(130% 180% at 50% -52%, #1c212d 56%, #39404f 59%, transparent 62%),
+    radial-gradient(80% 120% at 50% 0%, rgba(255, 255, 255, 0.5), transparent 62%);
 }
+.pm-windows { display: flex; gap: 5px; margin-top: -14px; }
+.pm-windows i {
+  width: 28px;
+  height: 15px;
+  background: linear-gradient(160deg, #9fc2ff 0%, #21345c 45%, #0a1226);
+  border: 2px solid #aeb6c6;
+  border-radius: 3px 3px 6px 6px;
+  box-shadow:
+    inset 0 2px 5px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(90, 140, 230, 0.35);
+}
+.pm-windows i:nth-child(1) { transform: skewX(10deg) rotate(3deg); }
+.pm-windows i:nth-child(4) { transform: skewX(-10deg) rotate(-3deg); }
 /* control strip below the nose */
 .pm-head {
   position: relative;
@@ -243,25 +278,35 @@
   text-transform: uppercase;
   color: #4a5468;
 }
-.pm-close {
+/* the dismiss control: an ignition switch, not a window × */
+.pm-liftoff {
   margin-left: auto;
-  display: grid;
-  place-items: center;
-  width: 34px; height: 34px;
-  font-size: 1.35rem;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: #1c2738;
   background: rgba(20, 30, 45, 0.06);
-  border: 1px solid rgba(20, 30, 45, 0.25);
-  border-radius: 50%;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.25s ease;
+  border: 1px solid rgba(20, 30, 45, 0.3);
+  border-radius: 100px;
+  padding: 7px 14px;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease;
 }
-.pm-close:hover {
-  background: #ff6f5e;
+.pm-liftoff-icon {
+  color: #e07020;
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+.pm-liftoff:hover {
+  background: linear-gradient(180deg, #ff8b3d, #ff6f5e);
   border-color: #ff6f5e;
   color: #fff;
-  transform: rotate(90deg);
+  box-shadow: 0 0 18px rgba(255, 122, 44, 0.45);
 }
+.pm-liftoff:hover .pm-liftoff-icon { color: #fff; transform: translateY(-2px); }
 /* scrollable dossier body */
 .pm-body {
   position: relative;
@@ -277,7 +322,116 @@
 .pm-body::-webkit-scrollbar { width: 8px; }
 .pm-body::-webkit-scrollbar-thumb { background: rgba(20, 30, 45, 0.22); border-radius: 4px; }
 
-/* compact + dark-on-white theming of the dossier inside the capsule */
+/* ---- aft section: bulkhead plate + three engine bells + flames ---- */
+.pm-aft {
+  position: relative;
+  z-index: 0;
+  flex: none;
+  height: 46px;
+  margin-top: -14px; /* tucks under the fuselage's rounded base */
+  pointer-events: none;
+}
+.pm-aft-plate {
+  position: absolute;
+  inset: 0 9%;
+  clip-path: polygon(2% 0, 98% 0, 86% 100%, 14% 100%);
+  background: linear-gradient(180deg, #58627a 0%, #39404f 45%, #232936 100%);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+.pm-engine {
+  position: absolute;
+  bottom: 6px;
+  transform: translateX(-50%);
+}
+.pm-engine-l { left: calc(50% - 58px); }
+.pm-engine-c { left: 50%; bottom: 2px; }
+.pm-engine-r { left: calc(50% + 58px); }
+.pm-bell {
+  display: block;
+  width: 28px;
+  height: 24px;
+  clip-path: polygon(26% 0, 74% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.3), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.35)),
+    linear-gradient(180deg, #7a8398, #454d5e 55%, #2b3140);
+  box-shadow: inset 0 -4px 9px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.4s ease;
+}
+.pm-engine-c .pm-bell { width: 36px; height: 30px; }
+/* engines cool to an ember glow once docked */
+.is-docked .pm-bell {
+  box-shadow:
+    inset 0 -5px 10px rgba(255, 130, 50, 0.45),
+    inset 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+/* per-engine flame cones — lit only while flying */
+.pm-flame {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.pm-flame-outer {
+  width: 26px;
+  height: 92px;
+  margin-top: -4px;
+  background: linear-gradient(180deg, #fff2c4 0%, #ffd34d 22%, #ff7a1a 52%, rgba(255, 90, 20, 0.35) 78%, transparent);
+  clip-path: polygon(18% 0, 82% 0, 62% 62%, 52% 100%, 48% 100%, 38% 62%);
+  filter: blur(1.5px);
+}
+.pm-flame-inner {
+  width: 12px;
+  height: 48px;
+  margin-top: -2px;
+  background: linear-gradient(180deg, #ffffff, #ffe9a8 55%, transparent);
+  clip-path: polygon(22% 0, 78% 0, 50% 100%);
+  filter: blur(0.5px);
+}
+.is-flying .pm-flame { opacity: 1; }
+.is-flying .pm-flame-outer { animation: pmFlick 0.14s ease-in-out infinite alternate; }
+.is-flying .pm-flame-inner { animation: pmFlick 0.11s ease-in-out infinite alternate; }
+.pm-engine-l .pm-flame-outer, .pm-engine-r .pm-flame-inner { animation-delay: 0.06s; }
+@keyframes pmFlick {
+  from { transform: translateX(-50%) scaleY(1) scaleX(1); }
+  to { transform: translateX(-50%) scaleY(0.78) scaleX(0.92); }
+}
+/* docked: engines throttle down to a short, calm hover burn */
+.is-docked .pm-flame { opacity: 0.9; }
+.is-docked .pm-flame-outer { animation: pmFlickIdle 0.18s ease-in-out infinite alternate; }
+.is-docked .pm-flame-inner { animation: pmFlickIdle 0.14s ease-in-out infinite alternate; }
+@keyframes pmFlickIdle {
+  from { transform: translateX(-50%) scaleY(0.44) scaleX(0.82); }
+  to { transform: translateX(-50%) scaleY(0.32) scaleX(0.72); }
+}
+/* big soft exhaust glow beneath the whole cluster while flying */
+.pm-exhaust {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 70%;
+  height: 150px;
+  transform: translateX(-50%);
+  transform-origin: top center;
+  background: radial-gradient(50% 100% at 50% 0%, rgba(255, 214, 130, 0.9), rgba(255, 120, 40, 0.5) 40%, transparent 72%);
+  filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.is-flying .pm-exhaust { opacity: 1; animation: pmExhaust 0.4s ease-in-out infinite alternate; }
+.is-docked .pm-exhaust { opacity: 0.45; animation: pmExhaustIdle 0.55s ease-in-out infinite alternate; }
+@keyframes pmExhaust {
+  from { transform: translateX(-50%) scaleY(1); }
+  to { transform: translateX(-50%) scaleY(0.82); }
+}
+@keyframes pmExhaustIdle {
+  from { transform: translateX(-50%) scaleY(0.5); }
+  to { transform: translateX(-50%) scaleY(0.38); }
+}
+
+/* compact + dark-on-white theming of the dossier inside the fuselage */
 .pm-panel .detail-title {
   font-size: clamp(1.5rem, 4.5vw, 2rem);
   background: none;
@@ -304,9 +458,11 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pm-lights i:nth-child(3) { animation: none; }
-  .pm-exhaust { display: none; }
+  .pm-flame, .pm-exhaust { display: none; }
+  .pm-launch.is-docked .pm-craft { animation: none; }
 }
-/* on small screens, let the capsule span the width comfortably */
+/* on small screens, span the width; wings would poke offscreen, so drop them */
 @media (max-width: 540px) {
   .pm-launch { left: 16px; right: 16px; width: auto; }
+  .pm-wing { display: none; }
 }
