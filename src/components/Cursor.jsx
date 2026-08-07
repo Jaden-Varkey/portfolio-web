@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 // Custom spaceship cursor. Follows the mouse via transform (no layout, no lag).
 // When hovering an interactive element it ignites and shoots flames.
 const INTERACTIVE = 'a, button, [role="button"], input, label, ' +
-  '.proj-row.is-link, .social-link, .marquee-item, .exp-row, .detail-btn'
+  '.proj-card.is-link, .social-link, .marquee-item, .detail-btn'
 
 export default function Cursor() {
   const ref = useRef(null)

@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const items = [
+  { id: 'home', label: 'Home' },
   { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
   { id: 'stack', label: 'Stack' },
 ]
 
@@ -16,18 +16,22 @@ export default function FloatingNav() {
   const scrollTo = (id) =>
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
+  const home = () => {
+    if (pathname !== '/') navigate('/')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const go = (id) => {
+    if (id === 'home') {
+      home()
+      return
+    }
     if (pathname !== '/') {
       navigate('/')
       setTimeout(() => scrollTo(id), 80)
     } else {
       scrollTo(id)
     }
-  }
-
-  const home = () => {
-    if (pathname !== '/') navigate('/')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (

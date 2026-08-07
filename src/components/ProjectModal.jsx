@@ -54,31 +54,30 @@ export default function ProjectModal({ slug, onClose }) {
           x: 'calc(104vw - 50% - 30px)',
           y: 'calc(-6vh + 30%)',
           scale: 0.14,
-          rotate: -74,
+          rotate: -52,
           opacity: 0,
         },
         animate: {
           x: 'calc(0vw - 0% - 0px)',
-          y: ['calc(-6vh + 30%)', 'calc(-13vh + 14%)', 'calc(0vh + 0%)'],
+          y: ['calc(-6vh + 30%)', 'calc(-12vh + 12%)', 'calc(0vh + 0%)'],
           scale: 1,
           rotate: 0,
           opacity: 1,
-          // one continuous glide: each property runs the full flight with its
-          // own curve, so nothing changes direction at a keyframe boundary.
-          // The rotation's slow-start ease keeps the craft tilted while it is
-          // fast, then curls it upright smoothly as it brakes into the pad.
+          // one continuous glide: every property shares the same gentle,
+          // decelerating curve so the craft reads as a single rigid body
+          // easing into its pad, rather than parts arriving at different times.
           transition: {
-            duration: 1.5,
-            x: { duration: 1.5, ease: [0.3, 0.85, 0.25, 1] },
-            y: { duration: 1.5, times: [0, 0.5, 1], ease: ['easeOut', 'easeInOut'] },
-            scale: { duration: 1.5, ease: [0.35, 0.8, 0.3, 1] },
-            rotate: { duration: 1.5, ease: [0.55, 0, 0.2, 1] },
-            opacity: { duration: 0.25, ease: 'easeOut' },
+            duration: 1.7,
+            x: { duration: 1.7, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.7, times: [0, 0.55, 1], ease: [0.16, 1, 0.3, 1] },
+            scale: { duration: 1.7, ease: [0.16, 1, 0.3, 1] },
+            rotate: { duration: 1.7, ease: [0.16, 1, 0.3, 1] },
+            opacity: { duration: 0.35, ease: 'easeOut' },
           },
         },
         exit: {
           y: TO_ORBIT,
-          transition: { duration: 0.75, ease: [0.62, 0, 0.86, 0.35] },
+          transition: { duration: 0.8, ease: [0.7, 0, 0.84, 0] },
         },
       }
 

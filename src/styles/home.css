@@ -147,50 +147,47 @@
   .side-preview { display: none; }
 }
 
-/* ---------- PROJECTS ---------- */
-.proj-list { list-style: none; display: flex; flex-direction: column; }
-.proj-item { border-top: 1px solid var(--line); }
-.proj-item:last-child { border-bottom: 1px solid var(--line); }
-.proj-row {
-  display: block;
+/* ---------- PROJECTS (instrument cards) ---------- */
+.proj-section { padding: 32px 0; }
+.proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: stretch; }
+.proj-grid-item { height: 100%; }
+.proj-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
   text-align: left;
-  background: transparent;
-  border: 0;
+  background: #12151b;
+  border: 1px solid var(--line);
+  border-radius: 16px;
   font: inherit;
   color: inherit;
   -webkit-appearance: none;
-  padding: 30px 4px;
-  transition: padding-left 0.35s cubic-bezier(0.22,1,0.36,1);
+  padding: 20px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, background 0.3s ease;
 }
-button.proj-row.is-link { cursor: pointer; }
-.proj-row.is-link:hover { padding-left: 14px; }
-.proj-head { display: flex; align-items: center; gap: 12px; }
+button.proj-card.is-link { cursor: pointer; }
+.proj-card.is-link:hover { transform: translateY(-4px); border-color: var(--accent); background: #161a21; }
+.proj-head { display: flex; align-items: center; gap: 10px; }
 .proj-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.8rem, 5.5vw, 2.7rem);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   letter-spacing: -0.02em;
-  line-height: 1.04;
+  line-height: 1.1;
 }
-.proj-arrow { font-size: 1.3rem; color: var(--muted); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease; }
-.proj-row.is-link:hover .proj-arrow { transform: translate(5px,-5px); color: var(--accent); }
-.proj-row.is-link:hover .proj-name { color: var(--accent); }
-.proj-blurb { color: var(--muted); margin: 10px 0 14px; max-width: 52ch; }
-.proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.proj-tag { font-size: 0.74rem; color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 4px 11px; }
+.proj-arrow { font-size: 1rem; color: var(--muted); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease; }
+.proj-card.is-link:hover .proj-arrow { transform: translate(5px,-5px); color: var(--accent); }
+.proj-card.is-link:hover .proj-name { color: var(--accent); }
+.proj-blurb { color: var(--muted); margin: 8px 0 12px; font-size: 0.88rem; flex: 1; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.proj-tag { font-size: 0.66rem; color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px; }
 .proj-thumb-inline { display: none; }
-
-/* ---------- EXPERIENCE ---------- */
-.exp-list { display: flex; flex-direction: column; gap: 30px; }
-.exp-row { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; }
-.exp-company { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; letter-spacing: -0.01em; }
-.exp-role { color: var(--accent); font-size: 0.92rem; font-weight: 500; margin: 3px 0 8px; }
-.exp-line { color: var(--muted); font-size: 0.98rem; max-width: 50ch; }
-.exp-aside { flex-shrink: 0; text-align: right; }
-.exp-date { display: block; font-size: 0.82rem; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.exp-loc { display: block; font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
-.exp-thumb-inline { display: none; }
+@media (max-width: 640px) {
+  .proj-grid { grid-template-columns: 1fr; }
+}
 
 /* ---------- TECH MARQUEE ---------- */
 .tech-section { padding-bottom: 80px; overflow: hidden; }
@@ -230,7 +227,7 @@ button.proj-row.is-link { cursor: pointer; }
 /* ---------- RESPONSIVE ---------- */
 @media (hover: none), (max-width: 720px) {
   .cursor-preview { display: none; }
-  .proj-thumb-inline, .exp-thumb-inline {
+  .proj-thumb-inline {
     display: block;
     width: 100%;
     margin-top: 16px;
@@ -239,8 +236,6 @@ button.proj-row.is-link { cursor: pointer; }
   }
 }
 @media (max-width: 600px) {
-  .exp-row { flex-direction: column; gap: 6px; }
-  .exp-aside { text-align: left; order: -1; }
   .tech-cloud { gap: 20px 16px; }
   .tech-tile { width: 50px; height: 50px; }
 }

@@ -5,3 +5,6 @@ dist
 
 # personal source files not part of the site
 *.pdf
+
+.vercel
+.env*

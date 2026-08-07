@@ -137,18 +137,32 @@
 }
 /* touchdown compression, then a slight perpetual hover-bounce on the burn */
 .pm-launch.is-docked .pm-craft {
-  animation: pmSettle 0.5s ease-out, pmHover 3.8s ease-in-out 0.5s infinite;
+  animation: pmSettle 0.6s cubic-bezier(0.34, 1.2, 0.4, 1), pmHover 4.4s ease-in-out 0.6s infinite;
 }
 @keyframes pmSettle {
   0% { transform: translateY(0); }
-  40% { transform: translateY(6px); }
-  75% { transform: translateY(-2px); }
+  45% { transform: translateY(5px); }
+  75% { transform: translateY(-1.5px); }
   100% { transform: translateY(0); }
 }
 @keyframes pmHover {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-4px); }
 }
+/* soft engine-glow trail behind the whole craft while it burns */
+.pm-craft::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(60% 60% at 50% 85%, rgba(255, 150, 60, 0.35), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.pm-launch.is-flying .pm-craft::after { opacity: 1; }
+.pm-launch.is-docked .pm-craft::after { opacity: 0.4; }
 /* vertical stabilizer peeking above the nose */
 .pm-fin {
   position: absolute;
@@ -391,20 +405,20 @@
   filter: blur(0.5px);
 }
 .is-flying .pm-flame { opacity: 1; }
-.is-flying .pm-flame-outer { animation: pmFlick 0.14s ease-in-out infinite alternate; }
-.is-flying .pm-flame-inner { animation: pmFlick 0.11s ease-in-out infinite alternate; }
-.pm-engine-l .pm-flame-outer, .pm-engine-r .pm-flame-inner { animation-delay: 0.06s; }
+.is-flying .pm-flame-outer { animation: pmFlick 0.32s ease-in-out infinite alternate; }
+.is-flying .pm-flame-inner { animation: pmFlick 0.26s ease-in-out infinite alternate; }
+.pm-engine-l .pm-flame-outer, .pm-engine-r .pm-flame-inner { animation-delay: 0.1s; }
 @keyframes pmFlick {
   from { transform: translateX(-50%) scaleY(1) scaleX(1); }
-  to { transform: translateX(-50%) scaleY(0.78) scaleX(0.92); }
+  to { transform: translateX(-50%) scaleY(0.9) scaleX(0.96); }
 }
 /* docked: engines throttle down to a short, calm hover burn */
 .is-docked .pm-flame { opacity: 0.9; }
-.is-docked .pm-flame-outer { animation: pmFlickIdle 0.18s ease-in-out infinite alternate; }
-.is-docked .pm-flame-inner { animation: pmFlickIdle 0.14s ease-in-out infinite alternate; }
+.is-docked .pm-flame-outer { animation: pmFlickIdle 0.42s ease-in-out infinite alternate; }
+.is-docked .pm-flame-inner { animation: pmFlickIdle 0.34s ease-in-out infinite alternate; }
 @keyframes pmFlickIdle {
-  from { transform: translateX(-50%) scaleY(0.44) scaleX(0.82); }
-  to { transform: translateX(-50%) scaleY(0.32) scaleX(0.72); }
+  from { transform: translateX(-50%) scaleY(0.44) scaleX(0.86); }
+  to { transform: translateX(-50%) scaleY(0.36) scaleX(0.78); }
 }
 /* big soft exhaust glow beneath the whole cluster while flying */
 .pm-exhaust {
@@ -420,8 +434,8 @@
   opacity: 0;
   transition: opacity 0.25s ease;
 }
-.is-flying .pm-exhaust { opacity: 1; animation: pmExhaust 0.4s ease-in-out infinite alternate; }
-.is-docked .pm-exhaust { opacity: 0.45; animation: pmExhaustIdle 0.55s ease-in-out infinite alternate; }
+.is-flying .pm-exhaust { opacity: 1; animation: pmExhaust 0.7s ease-in-out infinite alternate; }
+.is-docked .pm-exhaust { opacity: 0.45; animation: pmExhaustIdle 0.9s ease-in-out infinite alternate; }
 @keyframes pmExhaust {
   from { transform: translateX(-50%) scaleY(1); }
   to { transform: translateX(-50%) scaleY(0.82); }

@@ -9,19 +9,19 @@ export default function Projects() {
   const [openSlug, setOpenSlug] = useState(null) // project shown in the modal
 
   return (
-    <section className="section" id="projects">
+    <section className="section proj-section" id="projects">
       <div className="wrap">
         <p className="eyebrow">Projects</p>
-        <ul className="proj-list">
+        <div className="proj-grid">
           {projects.map((p, i) => {
-            const Row = p.slug ? 'button' : 'div'
-            const rowProps = p.slug
+            const Card = p.slug ? 'button' : 'div'
+            const cardProps = p.slug
               ? { type: 'button', onClick: () => setOpenSlug(p.slug) }
               : {}
             return (
-              <motion.li
+              <motion.div
                 key={p.name}
-                className="proj-item"
+                className="proj-grid-item"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
@@ -29,7 +29,7 @@ export default function Projects() {
                 onMouseEnter={() => setActive(i)}
                 onMouseLeave={() => setActive(null)}
               >
-                <Row className={`proj-row ${p.slug ? 'is-link' : ''}`} {...rowProps}>
+                <Card className={`proj-card ${p.slug ? 'is-link' : ''}`} {...cardProps}>
                   <div className="proj-head">
                     <h3 className="proj-name gradient-text">{p.name}</h3>
                     {p.slug && <span className="proj-arrow" aria-hidden>↗</span>}
@@ -39,17 +39,17 @@ export default function Projects() {
                     {p.tags.map((t) => <span key={t} className="proj-tag">{t}</span>)}
                   </div>
                   {/* Inline thumbnail — shown only on touch / small screens. */}
-                  <img className="proj-thumb-inline" src={asset(p.thumb)} alt={p.name} loading="lazy" />
-                </Row>
-              </motion.li>
+                  {p.thumb && <img className="proj-thumb-inline" src={asset(p.thumb)} alt={p.name} loading="lazy" />}
+                </Card>
+              </motion.div>
             )
           })}
-        </ul>
+        </div>
       </div>
 
       {/* Hover preview, parked on the right side of the screen (desktop). */}
       <AnimatePresence>
-        {active !== null && (
+        {active !== null && projects[active].thumb && (
           <motion.img
             key={active}
             className="side-preview"
