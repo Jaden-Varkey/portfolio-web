@@ -147,10 +147,55 @@
   .side-preview { display: none; }
 }
 
-/* ---------- PROJECTS (instrument cards) ---------- */
-.proj-section { padding: 32px 0; }
-.proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: stretch; }
-.proj-grid-item { height: 100%; }
+/* ---------- PROJECTS (bento mosaic) ---------- */
+/* Projects break out of the 760px reading column into a wider showcase grid. */
+.proj-section {
+  padding: 32px 0;
+  justify-content: flex-start;
+  padding-top: clamp(80px, 12vh, 130px);
+  scroll-snap-align: start;
+}
+.proj-wrap { max-width: 1180px; }
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 188px;
+  grid-auto-flow: dense;
+  gap: 14px;
+}
+.proj-grid-item { min-width: 0; height: 100%; }
+.proj-grid-item.c2 { grid-column: span 2; }
+.proj-grid-item.r2 { grid-row: span 2; }
+
+/* the feature tile carries a little more typographic weight, content centred */
+.proj-grid-item.feature .proj-card { justify-content: center; }
+.proj-grid-item.feature .proj-name { font-size: clamp(1.5rem, 2.3vw, 2rem); }
+.proj-grid-item.feature .proj-blurb { font-size: 0.98rem; -webkit-line-clamp: 4; margin-bottom: 16px; }
+.proj-grid-item.feature .proj-tags { margin-top: 0; }
+
+/* two columns on narrower viewports; feature stays full-width */
+@media (max-width: 1080px) {
+  .proj-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 178px;
+    grid-auto-flow: row;
+  }
+  .proj-grid-item.c2 { grid-column: span 1; }
+  .proj-grid-item.r2 { grid-row: span 1; }
+  .proj-grid-item.feature { grid-column: span 2; }
+}
+
+@media (max-width: 620px) {
+  .proj-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .proj-grid-item,
+  .proj-grid-item.c2,
+  .proj-grid-item.feature { grid-column: span 1; height: auto; }
+  .proj-card { height: auto; }
+  /* full blurbs once cards flow at natural height */
+  .proj-grid-item .proj-blurb { -webkit-line-clamp: unset; display: block; overflow: visible; }
+}
+
 .proj-card {
   position: relative;
   display: flex;
@@ -164,7 +209,7 @@
   font: inherit;
   color: inherit;
   -webkit-appearance: none;
-  padding: 20px;
+  padding: 18px;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, background 0.3s ease;
 }
@@ -181,13 +226,21 @@ button.proj-card.is-link { cursor: pointer; }
 .proj-arrow { font-size: 1rem; color: var(--muted); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease; }
 .proj-card.is-link:hover .proj-arrow { transform: translate(5px,-5px); color: var(--accent); }
 .proj-card.is-link:hover .proj-name { color: var(--accent); }
-.proj-blurb { color: var(--muted); margin: 8px 0 12px; font-size: 0.88rem; flex: 1; }
+.proj-blurb {
+  color: var(--muted);
+  margin: 7px 0 12px;
+  font-size: 0.85rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.proj-grid-item.feature .proj-blurb { -webkit-line-clamp: 4; }
+/* single-cell tiles are short — keep the blurb to two lines so tags never clip */
+.proj-grid-item:not(.c2):not(.feature) .proj-blurb { -webkit-line-clamp: 2; }
 .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
 .proj-tag { font-size: 0.66rem; color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px; }
 .proj-thumb-inline { display: none; }
-@media (max-width: 640px) {
-  .proj-grid { grid-template-columns: 1fr; }
-}
 
 /* ---------- TECH MARQUEE ---------- */
 .tech-section { padding-bottom: 80px; overflow: hidden; }

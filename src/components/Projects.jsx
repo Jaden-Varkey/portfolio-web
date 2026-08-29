@@ -4,13 +4,17 @@ import { projects } from '../data/content.js'
 import { asset } from '../lib/asset.js'
 import ProjectModal from './ProjectModal.jsx'
 
+// Bento layout: which cells each card claims, by position in the list. The
+// grid packs these densely into a 4-column mosaic (areas sum to a clean fill).
+const LAYOUT = ['c2 r2 feature', 'c2', '', '', 'c2', '', '']
+
 export default function Projects() {
   const [active, setActive] = useState(null) // index being hovered
   const [openSlug, setOpenSlug] = useState(null) // project shown in the modal
 
   return (
     <section className="section proj-section" id="projects">
-      <div className="wrap">
+      <div className="wrap proj-wrap">
         <p className="eyebrow">Projects</p>
         <div className="proj-grid">
           {projects.map((p, i) => {
@@ -21,7 +25,7 @@ export default function Projects() {
             return (
               <motion.div
                 key={p.name}
-                className="proj-grid-item"
+                className={`proj-grid-item ${LAYOUT[i] || ''}`}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}

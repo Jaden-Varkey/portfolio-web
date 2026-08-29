@@ -14,8 +14,8 @@ export const projects = [
   {
     slug: 'options-risk-engine',
     name: 'Options Risk Engine',
-    blurb: 'Full-stack options trading dashboard with sub-95ms pricing latency.',
-    tags: ['React', 'Python', 'FastAPI', 'Cloudflare'],
+    blurb: 'Full-stack options-risk dashboard for Dekalb Capital Management LLC — prices a live chain and shows risk in real time.',
+    tags: ['React', 'Python', 'FastAPI', 'Cloudflare', 'Ironbeam API'],
   },
   {
     slug: 'redact-ai',
@@ -182,18 +182,31 @@ export const projectDetails = {
   },
   'options-risk-engine': {
     name: 'Options Risk Engine',
-    subtitle: 'Options Trading Risk Dashboard for Dekalb Capital',
-    meta: ['React', 'Python', 'FastAPI', 'Cloudflare Workers', 'Ironbeam API'],
+    subtitle: 'Options trading risk dashboard · Dekalb Capital Management LLC, Sycamore, IL',
+    meta: ['React', 'FastAPI', 'Python', 'NumPy', 'Pandas', 'Cloudflare Workers', 'Ironbeam API'],
     images: [],
     links: [
       { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/dekalb-options-risk-engine' },
     ],
-    lead: 'A full-stack dashboard utilizing vectorized Black-76 models to price 5,000+ contracts with sub-95ms latency.',
-    sections: [],
+    lead: 'Prices a live options chain and shows the risk a trader is carrying — greeks, exposure, and P&L — in real time.',
+    sections: [
+      {
+        heading: 'How it works',
+        body: 'A FastAPI service polls the Ironbeam API for quotes and prices the whole chain with a vectorized Black-76 model. Greeks and exposure recompute on every tick and stream to a React front end.',
+      },
+      {
+        heading: 'Architecture',
+        body: 'An asyncio loop runs quote polling and repricing concurrently, so a slow network round-trip never blocks the chain from updating. The pricing core is a pure NumPy module with no I/O, which keeps it fast and unit-testable in isolation. The server holds the last chain snapshot and sends the client only what changed.',
+      },
+      {
+        heading: 'Currently',
+        body: 'Tracking micro WTI crude futures (MCL) and their options; the contract set is configurable.',
+      },
+    ],
     features: [
-      { title: 'Sub-95ms latency', body: 'Prices over 5,000 contracts almost instantly via vectorized Black-76 models and NumPy.' },
-      { title: 'Asynchronous polling', body: 'Engineered a REST polling engine driving a ~7% increase in returns.' },
-      { title: 'Time saver', body: 'Automated processes saving traders 2+ hours weekly.' },
+      { title: 'Vectorized pricing', body: 'The full chain is priced in one Black-76 pass over NumPy arrays, not contract-by-contract.' },
+      { title: 'Live risk view', body: 'Greeks, net exposure, and P&L update on every quote tick.' },
+      { title: 'Incremental updates', body: 'Only the strikes that moved are diffed and pushed to the client each tick.' },
     ],
   },
   'redact-ai': {
@@ -204,10 +217,10 @@ export const projectDetails = {
     links: [
       { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/redact-ai' },
     ],
-    lead: 'A dev tool that actively redacts sensitive data from prompts, reducing PII exposure by over 99%.',
+    lead: 'A dev tool that actively redacts sensitive data from prompts before they ever leave your machine.',
     sections: [],
     features: [
-      { title: 'High recall sanitization', body: 'Achieves ≥93% recall in finding and removing PII.' },
+      { title: 'High recall sanitization', body: 'Achieves ≥93% recall in finding and removing PII exposure.' },
       { title: 'Semantic fidelity', body: 'Retains ≥85% of the original prompt meaning after sanitization.' },
       { title: 'Local LLM integration', body: 'Built to work seamlessly with Ollama.' },
     ],
@@ -224,7 +237,7 @@ export const projectDetails = {
     sections: [],
     features: [
       { title: 'Hybrid RAG', body: 'Combines multiple retrieval strategies using BAAI/BGE and ChromaDB.' },
-      { title: 'Low hallucination', body: 'Audited across 20+ page documents with a hallucination rate under 1%.' },
+      { title: 'Low hallucination', body: 'Audited across lengthy multi-page documents with a near-zero hallucination rate.' },
       { title: 'Streamlit UI', body: 'Accessible and interactive frontend for tax professionals.' },
     ],
   },
