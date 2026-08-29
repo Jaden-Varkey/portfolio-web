@@ -12,16 +12,22 @@ export const profile = {
 
 export const projects = [
   {
-    slug: 'ghostdrop',
-    name: 'GhostDrop',
-    blurb: 'Zero-knowledge, self-destructing secret sharing — encrypted in your browser, gone after the last view.',
-    tags: ['Rust', 'Redis', 'WebCrypto API', 'Docker'],
+    slug: 'options-risk-engine',
+    name: 'Options Risk Engine',
+    blurb: 'Full-stack options trading dashboard with sub-95ms pricing latency.',
+    tags: ['React', 'Python', 'FastAPI', 'Cloudflare'],
   },
   {
-    slug: 'openings-bot',
-    name: 'Openings Bot',
-    blurb: 'Get emailed or texted the instant a watched company opens a role matching your keywords — no scraping, no logins.',
-    tags: ['Python', 'GitHub Actions', 'Vercel'],
+    slug: 'redact-ai',
+    name: 'Redact AI',
+    blurb: 'Developer tool that redacts sensitive PII data from LLM prompts.',
+    tags: ['Python', 'FastAPI', 'PyTorch', 'Ollama'],
+  },
+  {
+    slug: 'lexvecta',
+    name: 'LexVecta',
+    blurb: 'Closed-domain hybrid RAG pipeline for corporate tax verification.',
+    tags: ['Python', 'Streamlit', 'ChromaDB', 'SQLite'],
   },
   {
     slug: 'nova-cua',
@@ -36,6 +42,18 @@ export const projects = [
     blurb: 'A gated, Purdue-only subleasing marketplace — verified, structured, on-platform.',
     tags: ['Supabase', 'TypeScript', 'OTP Auth', 'PostgreSQL'],
     thumb: 'boilersub2.png',
+  },
+  {
+    slug: 'ghostdrop',
+    name: 'GhostDrop',
+    blurb: 'Zero-knowledge, self-destructing secret sharing — encrypted in your browser, gone after the last view.',
+    tags: ['Rust', 'Redis', 'WebCrypto API', 'Docker'],
+  },
+  {
+    slug: 'openings-bot',
+    name: 'Openings Bot',
+    blurb: 'Get emailed or texted the instant a watched company opens a role matching your keywords — no scraping, no logins.',
+    tags: ['Python', 'GitHub Actions', 'Vercel'],
   },
 ]
 
@@ -160,6 +178,54 @@ export const projectDetails = {
       { title: 'Purdue-only auth', body: '@purdue.edu gate with OTP verification.' },
       { title: '3D panoramas', body: 'Virtual walkthroughs before anyone reaches out.' },
       { title: 'Live messaging', body: 'Built-in threaded chat, no phone numbers needed.' },
+    ],
+  },
+  'options-risk-engine': {
+    name: 'Options Risk Engine',
+    subtitle: 'Options Trading Risk Dashboard for Dekalb Capital',
+    meta: ['React', 'Python', 'FastAPI', 'Cloudflare Workers', 'Ironbeam API'],
+    images: [],
+    links: [
+      { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/dekalb-options-risk-engine' },
+    ],
+    lead: 'A full-stack dashboard utilizing vectorized Black-76 models to price 5,000+ contracts with sub-95ms latency.',
+    sections: [],
+    features: [
+      { title: 'Sub-95ms latency', body: 'Prices over 5,000 contracts almost instantly via vectorized Black-76 models and NumPy.' },
+      { title: 'Asynchronous polling', body: 'Engineered a REST polling engine driving a ~7% increase in returns.' },
+      { title: 'Time saver', body: 'Automated processes saving traders 2+ hours weekly.' },
+    ],
+  },
+  'redact-ai': {
+    name: 'Redact AI',
+    subtitle: 'PII Sanitization for LLM Prompts',
+    meta: ['Python', 'FastAPI', 'PyTorch', 'GLiNER2', 'spaCy', 'Ollama'],
+    images: [],
+    links: [
+      { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/redact-ai' },
+    ],
+    lead: 'A dev tool that actively redacts sensitive data from prompts, reducing PII exposure by over 99%.',
+    sections: [],
+    features: [
+      { title: 'High recall sanitization', body: 'Achieves ≥93% recall in finding and removing PII.' },
+      { title: 'Semantic fidelity', body: 'Retains ≥85% of the original prompt meaning after sanitization.' },
+      { title: 'Local LLM integration', body: 'Built to work seamlessly with Ollama.' },
+    ],
+  },
+  'lexvecta': {
+    name: 'LexVecta',
+    subtitle: 'Automated Corporate Tax Verification',
+    meta: ['Python', 'Streamlit', 'BAAI/BGE', 'ChromaDB', 'SQLite'],
+    images: [],
+    links: [
+      { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/LexVecta' },
+    ],
+    lead: 'A closed-domain hybrid RAG pipeline designed to automate corporate tax verification for SMEs in the UAE.',
+    sections: [],
+    features: [
+      { title: 'Hybrid RAG', body: 'Combines multiple retrieval strategies using BAAI/BGE and ChromaDB.' },
+      { title: 'Low hallucination', body: 'Audited across 20+ page documents with a hallucination rate under 1%.' },
+      { title: 'Streamlit UI', body: 'Accessible and interactive frontend for tax professionals.' },
     ],
   },
 }
