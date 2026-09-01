@@ -163,16 +163,142 @@ a { color: inherit; text-decoration: none; }
   position: fixed;
   inset: 0;
   z-index: 9000;
+  overflow: hidden;
+  pointer-events: none; /* doors keep animating after the page is interactive */
+}
+/* Two bay doors that part along the centre seam to reveal the page. */
+.intro-door {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50.5%; /* slight overlap so no hairline of page shows through */
   background: var(--bg);
+}
+.intro-door--top { top: 0; }
+.intro-door--bottom {
+  bottom: 0;
+  /* pad glow pooling under the ship */
+  background:
+    radial-gradient(56% 62% at 50% 100%, rgba(245, 177, 68, 0.13), transparent 70%),
+    var(--bg);
+}
+
+/* Glowing hairline where the doors meet; flares white at liftoff. */
+.intro-seam {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-0.5px);
+  background: linear-gradient(90deg, transparent, rgba(245, 177, 68, 0.55), transparent);
+  opacity: 0; /* stays hidden until the ship punches through it */
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+.intro-seam.is-hot {
+  opacity: 1;
+  box-shadow: 0 0 22px 4px rgba(245, 177, 68, 0.6);
+  background: linear-gradient(90deg, transparent, #fff2d6, transparent);
+}
+
+.intro-hud {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.intro-corner {
+  position: absolute;
+  top: 22px;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  opacity: 0.72;
+}
+.intro-corner--tl { left: 26px; }
+.intro-corner--tr { right: 26px; font-variant-numeric: tabular-nums; }
+
+.intro-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
 }
 .intro-name {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(2rem, 7vw, 3.6rem);
   letter-spacing: -0.03em;
+}
+
+.intro-gauge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.intro-bar {
+  position: relative;
+  width: min(260px, 52vw);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.13);
+  overflow: hidden;
+}
+.intro-bar-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: var(--accent);
+  box-shadow: 0 0 12px rgba(245, 177, 68, 0.7);
+}
+.intro-pct {
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.intro-status {
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+/* Ship parked on the seam, engines cold until liftoff. */
+.intro-ship {
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  margin-left: -20px;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.6));
+}
+/* the pad the ship rests on */
+.intro-pad {
+  position: absolute;
+  left: 50%;
+  bottom: calc(13% - 1px);
+  width: 92px;
+  height: 1px;
+  margin-left: -46px;
+  background: linear-gradient(90deg, transparent, rgba(245, 177, 68, 0.5), transparent);
+}
+.intro-ship .flame { opacity: 0; transform-origin: 18px 26px; }
+.intro-ship.is-lit .flame {
+  opacity: 1;
+  animation: intro-flame 0.16s ease-in-out infinite alternate;
+}
+.intro-ship.is-lit { filter: drop-shadow(0 10px 26px rgba(245, 177, 68, 0.55)); }
+@keyframes intro-flame {
+  from { transform: scaleY(0.85); }
+  to { transform: scaleY(1.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-ship.is-lit .flame { animation: none; }
 }
 
 /* ---------- FLOATING TOP NAV ---------- */

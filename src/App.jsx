@@ -5,6 +5,7 @@ import Home from './pages/Home.jsx'
 import ProjectDetail from './pages/ProjectDetail.jsx'
 import Cursor from './components/Cursor.jsx'
 import CursorTrail from './components/CursorTrail.jsx'
+import ContribGraph from './components/ContribGraph.jsx'
 import PageIntro from './components/PageIntro.jsx'
 import FloatingNav from './components/FloatingNav.jsx'
 
@@ -45,6 +46,7 @@ export default function App() {
       <CopyGuard />
       <ScrollProgress />
       <Cursor />
+      <ContribGraph />
       <PageIntro />
       <FloatingNav />
       <ScrollToTop />

@@ -32,6 +32,7 @@ export default function Hero() {
               rel="noreferrer"
               className="social-link"
               aria-label={s.label}
+              data-contrib={s.icon === 'github' ? '' : undefined}
             >
               <LogoTile icon={s.icon} label={s.label} className="social-tile" />
             </a>
