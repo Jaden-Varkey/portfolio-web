@@ -48,8 +48,6 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  /* view one section at a time — each full-height section snaps into place */
-  scroll-snap-type: y mandatory;
 }
 
 body {
@@ -137,7 +135,10 @@ a { color: inherit; text-decoration: none; }
 
 ::selection { background: var(--accent); color: #1a1205; }
 
-.wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); position: relative; }
+/* width:100% is load-bearing: .section is a flex column, and `margin: 0 auto`
+   on a flex item suppresses stretch — without it every .wrap collapses to
+   its own content width and centres itself. */
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); position: relative; }
 
 .section {
   padding: 64px 0;
@@ -145,7 +146,6 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: center;
 }
 
 .eyebrow {
@@ -156,6 +156,19 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 30px;
+}
+
+/* Numbered eyebrow over a large display title. The eyebrow alone left every
+   section opening at 0.72rem, which read as flat no matter how good the cards
+   below it were. */
+.section-head { margin-bottom: 42px; }
+.section-head .eyebrow { margin-bottom: 10px; }
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  letter-spacing: -0.03em;
+  line-height: 1.02;
 }
 
 /* ---------- LOAD TRANSITION ---------- */
@@ -377,6 +390,12 @@ a { color: inherit; text-decoration: none; }
   .nav-links { gap: 2px; }
   .nav-link { padding: 6px 9px; font-size: 0.76rem; }
 }
+/* four items ("Experience" is the long one) stop fitting on the narrowest phones */
+@media (max-width: 400px) {
+  .floating-nav { padding: 0 10px; gap: 8px; }
+  .nav-links { gap: 0; }
+  .nav-link { padding: 5px 6px; font-size: 0.7rem; }
+}
 
 /* ---------- ANIMATED LIGHT-HUE TEXT (key words) ---------- */
 .gradient-text {
@@ -413,11 +432,10 @@ a { color: inherit; text-decoration: none; }
 /* On phones, sections stack and may exceed the viewport — let them flow freely
    instead of snapping/centering. */
 @media (max-width: 720px) {
-  html { scroll-snap-type: none; }
   .section { min-height: auto; display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; scroll-snap-type: none; }
+  html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }

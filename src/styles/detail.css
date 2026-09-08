@@ -117,7 +117,7 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
-/* flight wrapper: framer-motion drives its transform (position is the pad).
+/* flight wrapper: Motion drives its transform (position is the pad).
    The pad floats above the bottom edge so the idle flames stay in view. */
 .pm-launch {
   position: fixed;

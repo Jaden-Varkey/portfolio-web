@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { fetchContributions } from './api/contributions.js'
+import { fetchContributions } from './shared/githubContributions.js'
 
-// Serves /api/contributions during `vite dev`, where Vercel's function runtime
-// isn't running, so local dev exercises the same handler as production.
+// Serves /api/contributions during `vite dev`, where Cloudflare's Pages
+// Functions runtime isn't running. It calls the same shared scraper the
+// deployed Worker falls back to, so local dev exercises real code.
 function contributionsApi() {
   return {
     name: 'contributions-api',
@@ -27,7 +28,7 @@ function contributionsApi() {
   }
 }
 
-// base: '/' for clean URLs with BrowserRouter on Netlify (served at domain root).
+// base: '/' for clean URLs with BrowserRouter on Cloudflare Pages (domain root).
 // Asset references use import.meta.env.BASE_URL so deep routes resolve correctly.
 export default defineConfig({
   plugins: [react(), contributionsApi()],

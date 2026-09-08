@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { projectDetails } from '../data/content.js'
 import Background from '../components/Background.jsx'
 import ProjectDetailContent from '../components/ProjectDetailContent.jsx'

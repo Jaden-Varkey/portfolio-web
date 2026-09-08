@@ -1,0 +1,238 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Origin tier for jadenvarkey.com - caches the GitHub contribution calendar and
+  tallies anonymous usage counters. Sized to stay inside AWS's always-free
+  allowances at any realistic traffic for a personal site.
+
+Parameters:
+  GitHubUser:
+    Type: String
+    Default: Jaden-Varkey
+    Description: GitHub login whose contribution calendar is served.
+  PortfolioKey:
+    Type: String
+    NoEcho: true
+    MinLength: 16
+    Description: >
+      Shared secret the Cloudflare Worker sends as x-portfolio-key. A throttle,
+      not a security boundary - the data served is public either way. Kept as a
+      NoEcho parameter rather than in Secrets Manager, which is not free.
+  AlertEmail:
+    Type: String
+    Description: Address that receives Lambda error/throttle alarms (confirm the SNS subscription by email).
+    AllowedPattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Architectures: [arm64]      # Graviton: cheaper per ms, same free-tier seconds
+    Timeout: 10
+    MemorySize: 256
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref PortfolioTable
+        PORTFOLIO_KEY: !Ref PortfolioKey
+        GITHUB_USER: !Ref GitHubUser
+
+Resources:
+
+  # --- Storage ---------------------------------------------------------------
+  # PROVISIONED, deliberately: DynamoDB's always-free tier covers 25 RCU/25 WCU
+  # of provisioned capacity and does NOT cover on-demand, which bills per
+  # request from the first one. 5/5 is far more than this needs and still leaves
+  # 80% of the free allowance spare. Burst capacity absorbs the ~20 KB snapshot
+  # write comfortably.
+  PortfolioTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${AWS::StackName}-portfolio'
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  # --- Contribution calendar origin -----------------------------------------
+  ContribFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Format: esm
+        Target: node22
+        Minify: true
+        Sourcemap: false
+        EntryPoints: [infra/lambda/contrib/index.mjs]
+        OutExtension: ['.js=.mjs']
+        # Provided by the managed Node 22 runtime; bundling it would only
+        # inflate the artefact.
+        External: ['@aws-sdk/*']
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-contrib'
+      # Repo root, so the bundler can follow the import into shared/.
+      CodeUri: ../
+      Handler: index.handler
+      Environment:
+        Variables:
+          MAX_AGE_SECONDS: 3600
+      FunctionUrlConfig:
+        AuthType: NONE      # gated by the shared header instead
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref PortfolioTable
+      Events:
+        Warm:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Input: '{"refresh": true}'
+            Description: Keeps the snapshot fresh so no visitor waits on GitHub.
+
+  # --- Usage counters --------------------------------------------------------
+  EventsFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Format: esm
+        Target: node22
+        Minify: true
+        Sourcemap: false
+        EntryPoints: [infra/lambda/events/index.mjs]
+        OutExtension: ['.js=.mjs']
+        External: ['@aws-sdk/*']
+    Properties:
+      FunctionName: !Sub '${AWS::StackName}-events'
+      CodeUri: ../
+      Handler: index.handler
+      MemorySize: 128
+      Timeout: 5
+      FunctionUrlConfig:
+        AuthType: NONE
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref PortfolioTable
+
+  # --- Logs ------------------------------------------------------------------
+  # Declared explicitly for the retention setting. CloudWatch's default is
+  # "never expire", which is the usual way a free side project starts billing.
+  ContribLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}-contrib'
+      RetentionInDays: 14
+
+  EventsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}-events'
+      RetentionInDays: 14
+
+  # --- Monitoring ------------------------------------------------------------
+  AlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub '${AWS::StackName}-alerts'
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref AlertEmail
+
+  ContribErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-contrib-errors'
+      AlarmDescription: Contribution origin threw. The edge scraper covers for it, so this is degraded, not down.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ContribFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  EventsErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-events-errors'
+      AlarmDescription: Counters Lambda threw. Visitor-invisible; counts are being lost.
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref EventsFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  # Throttling on a site this size means something is wrong (a loop, or someone
+  # hammering the Function URL) - worth knowing before it eats the free tier.
+  ThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-throttles'
+      AlarmDescription: Lambda concurrency throttling - unexpected at this traffic.
+      Namespace: AWS/Lambda
+      MetricName: Throttles
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref ContribFunction
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+  # DynamoDB throttling would mean the provisioned 5/5 is no longer enough -
+  # the signal to raise it (there are 20 more free units available).
+  TableThrottleAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-ddb-throttles'
+      AlarmDescription: DynamoDB throttled a request; raise provisioned capacity (up to 25 stays free).
+      Namespace: AWS/DynamoDB
+      MetricName: ThrottledRequests
+      Dimensions:
+        - Name: TableName
+          Value: !Ref PortfolioTable
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref AlertTopic]
+
+Outputs:
+  ContribUrl:
+    Description: Set as AWS_CONTRIB_URL in the Cloudflare Pages project.
+    Value: !GetAtt ContribFunctionUrl.FunctionUrl
+  EventsUrl:
+    Description: Set as AWS_EVENTS_URL in the Cloudflare Pages project.
+    Value: !GetAtt EventsFunctionUrl.FunctionUrl
+  TableName:
+    Description: DynamoDB table holding the snapshot and the counters.
+    Value: !Ref PortfolioTable

@@ -1,0 +1,11 @@
+# Copy to .dev.vars for `npm run pages:dev`. Real values live in the Cloudflare
+# Pages dashboard (Settings > Environment variables), not in the repo.
+#
+# Note: wrangler's --binding flag is NOT a substitute — it prints the variables
+# in the startup table but never delivers them to context.env. Use this file.
+#
+# With these unset the Pages Function skips the AWS origin and scrapes GitHub
+# from the edge, which is a supported degraded mode — the site still works.
+AWS_CONTRIB_URL=
+AWS_EVENTS_URL=
+PORTFOLIO_KEY=

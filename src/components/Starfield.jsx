@@ -126,8 +126,10 @@ export default function Starfield() {
         const x = s.x + mx * depth * 26
         const yy = y + my * depth * 26
         const tw = 0.5 + 0.5 * Math.sin(t * s.tws + s.tw)
-        const alpha = (0.35 + s.z * 0.6) * (0.45 + 0.55 * tw)
-        const sz = (2.4 + s.r * 3.2) * (0.8 + 0.35 * tw)
+        // Brighter floor and a wider swing, so the glitter reads rather than
+        // just shimmering at the edge of visible.
+        const alpha = (0.5 + s.z * 0.72) * (0.55 + 0.7 * tw)
+        const sz = (2.4 + s.r * 3.2) * (0.82 + 0.42 * tw)
         ctx.globalAlpha = Math.min(1, alpha)
         ctx.drawImage(s.warm ? spriteWarm : spriteCool, x - sz / 2, yy - sz / 2, sz, sz)
       }

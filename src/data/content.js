@@ -12,12 +12,6 @@ export const profile = {
 
 export const projects = [
   {
-    slug: 'options-risk-engine',
-    name: 'Options Risk Engine',
-    blurb: 'Full-stack options-risk dashboard for Dekalb Capital Management LLC — prices a live chain and shows risk in real time.',
-    tags: ['React', 'Python', 'FastAPI', 'Cloudflare', 'Ironbeam API'],
-  },
-  {
     slug: 'redact-ai',
     name: 'Redact AI',
     blurb: 'Developer tool that redacts sensitive PII data from LLM prompts.',
@@ -81,6 +75,7 @@ export const techStack = [
       { key: 'react', label: 'React' },
       { key: 'jquery', label: 'jQuery' },
       { key: 'numpy', label: 'NumPy' },
+      { key: 'spark', label: 'Apache Spark', file: 'spark.png' },
       { key: 'tensorflow', label: 'TensorFlow' },
       { key: 'langchain', label: 'LangChain' },
       { key: 'langflow', label: 'Langflow' },
@@ -104,12 +99,63 @@ export const techStack = [
       { key: 'github', label: 'GitHub' },
       { key: 'copilot', label: 'GitHub Copilot' },
       { key: 'docker', label: 'Docker' },
+      { key: 'azure', label: 'Microsoft Azure', file: 'azure.png' },
+      { key: 'databricks', label: 'Databricks', file: 'databricks.png' },
       { key: 'postman', label: 'Postman' },
       { key: 'vercel', label: 'Vercel', file: 'vercel.png' },
       { key: 'claude', label: 'Claude' },
       { key: 'antigravity', label: 'Antigravity' },
       { key: 'ibm', label: 'IBM' },
     ],
+  },
+]
+
+// Roles, newest first. `present: true` renders the small "Present" pill; dates
+// are deliberately omitted — the ordering carries the timeline.
+export const experience = [
+  {
+    company: 'Purdue University',
+    role: 'Teaching Assistant — CS 252 Systems Programming',
+    present: true,
+    blurb: 'Hosted weekly lab sections with 20+ students and office hours for 400+ students on systems programming in C/C++, Linux, operating systems, concurrency, memory management, and networking.',
+    tags: ['C', 'C++', 'Linux', 'Concurrency', 'Networking'],
+  },
+  {
+    company: 'Cummins',
+    role: 'Data Science Researcher',
+    present: true,
+    blurb: 'Developing an Agentic AI Platform Advisor to optimize Databricks and Spark data workloads. Building a closed-loop orchestration engine combining LLM reasoning, RAG, and PySpark on Azure to analyze cluster logs and dynamically generate CI/CD test pipelines.',
+    tags: ['Databricks', 'PySpark', 'Azure', 'LLMs', 'RAG', 'CI/CD'],
+  },
+  {
+    company: 'M-Assist CRM',
+    role: 'Software Engineering Intern',
+    blurb: 'Integrated third-party client REST APIs and shipped JWT-secured ASP.NET Core MVC for an enterprise CRM serving 400+ clients. Engineered a Knowledge Base-driven ELT engine to migrate legacy SQL Server reports to ClickHouse, reducing runtimes for SPs and report queries.',
+    tags: ['ASP.NET Core', 'JWT', 'SQL Server', 'ClickHouse', 'REST'],
+  },
+  {
+    company: 'Dekalb Capital Management LLC',
+    role: 'Software Engineering Contract',
+    blurb: 'Shipped an asynchronous REST polling engine with Ironbeam API routing designed to price options contracts through optimized low-latency Black-76 NumPy vectorizations. Deployed a React-based telemetry dashboard for real-time risk visualization and system monitoring.',
+    tags: ['Python', 'NumPy', 'React', 'REST', 'Ironbeam API'],
+  },
+  {
+    company: '3M Company',
+    role: 'Data Science Researcher',
+    blurb: "Engineered a GLIMS-integrated React dashboard for real-time hardware telemetry and inventory management to forecast lab consumable demand. Developed a Python + SQL backend to automate allocation of test samples across 145+ weathering machines at 3M's Weathering Research Centre, reducing lab downtime and operational bottlenecks.",
+    tags: ['React', 'Python', 'SQL', 'GLIMS'],
+  },
+  {
+    company: 'National University of Singapore',
+    role: 'Software Developer Intern',
+    blurb: 'Built an NLP-driven medical scheduling chatbot and computer vision applications using AWS infrastructure. Developed and optimized end-to-end ML pipelines through hyperparameter tuning and feature engineering to forecast customer churn in the telecom industry.',
+    tags: ['AWS', 'NLP', 'TensorFlow', 'Computer Vision'],
+  },
+  {
+    company: 'iXperience',
+    role: 'Blockchain Intern',
+    blurb: 'Designed decentralized identity verification strategies and smart contract architectures for blockchain-powered solutions.',
+    tags: ['Blockchain', 'Smart Contracts', 'Digital Identity'],
   },
 ]
 

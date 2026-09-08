@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { profile } from '../data/content.js'
 import LogoTile from './LogoTile.jsx'
 

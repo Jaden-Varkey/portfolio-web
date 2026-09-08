@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { loadContributions, monthLabels, toWeeks } from '../lib/contributions.js'
 
 // A GitHub-style contribution calendar that rides just above the cursor while
@@ -86,6 +86,10 @@ export default function ContribGraph() {
   // Re-place once the card exists (and again when data swaps its height).
   useEffect(() => { if (open) place() }, [open, data, failed])
 
+  // GitHub returns the whole calendar year, so the grid keeps its Jan-Dec
+  // shape year-round. Local calendar date, not `toISOString()`: UTC would
+  // dim today's own cell for anyone west of Greenwich.
+  const today = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD
   const weeks = data ? toWeeks(data.days) : null
   const months = weeks ? monthLabels(weeks) : []
 
@@ -125,7 +129,13 @@ export default function ContribGraph() {
                         {week.map((day, row) => (
                           <span
                             key={day ? day.d : `pad-${row}`}
-                            className={day ? `contrib-day l${day.l}` : 'contrib-day is-pad'}
+                            className={
+                              !day
+                                ? 'contrib-day is-pad'
+                                : day.d > today
+                                  ? 'contrib-day is-future'
+                                  : `contrib-day l${day.l}`
+                            }
                           />
                         ))}
                       </div>

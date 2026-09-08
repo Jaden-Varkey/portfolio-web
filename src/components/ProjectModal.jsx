@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { projectDetails } from '../data/content.js'
 import ProjectDetailContent from './ProjectDetailContent.jsx'
 import '../styles/detail.css'
@@ -14,7 +14,7 @@ import '../styles/detail.css'
 
 // Flight path: % terms are relative to the craft's own size, so the calc()
 // positions hold for any panel width/height. Every keyframe of a property
-// keeps the same calc() shape so framer-motion can interpolate them.
+// keeps the same calc() shape so Motion can interpolate them.
 const TO_ORBIT = 'calc(-140vh + 0%)'
 
 export default function ProjectModal({ slug, onClose }) {
@@ -36,7 +36,7 @@ export default function ProjectModal({ slug, onClose }) {
     document.addEventListener('keydown', onKey)
     const root = document.documentElement
     const prev = root.style.overflow
-    root.style.overflow = 'hidden' // root is the scroller (carries scroll-snap)
+    root.style.overflow = 'hidden' // root is the scroller
     return () => {
       document.removeEventListener('keydown', onKey)
       root.style.overflow = prev

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { techStack } from '../data/content.js'
 import LogoTile from './LogoTile.jsx'
 
@@ -45,7 +45,10 @@ export default function TechStack() {
   return (
     <section className="section tech-section" id="stack">
       <div className="wrap">
-        <p className="eyebrow">Stack</p>
+        <div className="section-head">
+          <p className="eyebrow">03 / Stack</p>
+          <h2 className="section-title">Stack</h2>
+        </div>
       </div>
       <div className="tech-rows">
         {techStack.map((cat, i) => (

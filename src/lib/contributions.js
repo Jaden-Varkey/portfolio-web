@@ -22,11 +22,27 @@ async function fromFallback() {
     c: day.count ?? 0,
   }))
   if (!days.length) throw new Error('fallback returned no days')
+  padYear(days, YEAR)
   return {
     user: 'Jaden-Varkey',
     year: YEAR,
     total: days.reduce((s, day) => s + day.c, 0),
     days,
+  }
+}
+
+// The primary source returns every cell from Jan 1 to Dec 31; the fallback only
+// promises days up to today. Pad the tail with zeroes so the grid keeps the same
+// full-year shape either way — future cells are dimmed at render time, and a
+// calendar that stopped at the current week would look truncated instead.
+function padYear(days, year) {
+  const end = `${year}-12-31`
+  const cursor = new Date(`${days[days.length - 1].d}T00:00:00Z`)
+  for (;;) {
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
+    const d = cursor.toISOString().slice(0, 10)
+    if (d > end) break
+    days.push({ d, l: 0, c: 0 })
   }
 }
 

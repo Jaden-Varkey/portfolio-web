@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const items = [
   { id: 'home', label: 'Home' },
   { id: 'projects', label: 'Projects' },
+  { id: 'experience', label: 'Experience' },
   { id: 'stack', label: 'Stack' },
 ]
 

@@ -7,4 +7,6 @@ dist
 *.pdf
 
 .vercel
+.wrangler
+.dev.vars
 .env*

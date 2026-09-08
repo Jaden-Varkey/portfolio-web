@@ -6,9 +6,22 @@
   overflow: hidden;
   background: var(--bg);
 }
+/* Live planet, drawn over the starfield so it occludes stars. The still photo
+   below stays as the fallback: it only fades out once the shader has actually
+   compiled, and fades back in if the GL context is ever lost. */
+.planet-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.bg-image.is-hidden { opacity: 0; }
+
 .bg-image {
   position: absolute;
   inset: -8%;
+  transition: opacity 0.6s ease;
   background-position: center;
   background-size: cover;
   will-change: transform;
@@ -33,35 +46,6 @@
   height: 100%;
   pointer-events: none;
 }
-/* Hyperspace-style light streaks that flash on each section snap. Concentrated
-   toward the periphery so the centre text stays readable, but bright enough to
-   read as a quick warp burst. */
-.bg-warp {
-  position: absolute;
-  inset: -35%;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0 20px,
-    rgba(222, 238, 255, 0) 20px,
-    rgba(222, 238, 255, 0.95) 22px,
-    rgba(170, 208, 255, 0) 24px,
-    transparent 24px 46px
-  );
-  -webkit-mask-image: radial-gradient(88% 100% at 50% 50%, transparent 26%, #000 78%);
-  mask-image: radial-gradient(88% 100% at 50% 50%, transparent 26%, #000 78%);
-  filter: blur(0.7px) brightness(1.5);
-  transform-origin: center;
-  will-change: transform, opacity;
-  animation: warpFlash 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes warpFlash {
-  0%   { opacity: 0;    transform: scaleY(1.2); }
-  14%  { opacity: 0.95; transform: scaleY(1.6); }
-  40%  { opacity: 0.95; transform: scaleY(2.2); }
-  100% { opacity: 0;    transform: scaleY(3.6); }
-}
-@media (prefers-reduced-motion: reduce) { .bg-warp { display: none; } }
 
 /* ---------- LOGOS (transparent, bare) ---------- */
 .logo-tile {
@@ -87,7 +71,6 @@
   display: flex;
   align-items: center;
   text-align: center;
-  scroll-snap-align: center;
 }
 .hero-inner { width: 100%; }
 .hero-hi { font-size: 0.95rem; color: var(--muted); margin-bottom: 10px; }
@@ -112,21 +95,6 @@
 .social-tile.sm { width: 26px; height: 26px; }
 .social-link:hover .logo-tile { transform: translateY(-4px) scale(1.1); }
 
-/* ---------- SHARED CURSOR PREVIEW (experience) ---------- */
-.cursor-preview {
-  position: fixed;
-  top: 0; left: 0;
-  width: 240px;
-  height: 156px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
-  pointer-events: none;
-  z-index: 50;
-  will-change: transform;
-}
-
 /* ---------- SIDE PREVIEW (projects) ---------- */
 .side-preview {
   position: fixed;
@@ -147,54 +115,54 @@
   .side-preview { display: none; }
 }
 
-/* ---------- PROJECTS (bento mosaic) ---------- */
-/* Projects break out of the 760px reading column into a wider showcase grid. */
+/* ---------- PROJECTS (horizontal track) ---------- */
+/* Vertical scroll drives horizontal travel: the section pins its first
+   viewport and the track slides left, then releases back to normal scrolling.
+   Section height is set inline from the measured overflow (see Projects.jsx). */
 .proj-section {
-  padding: 32px 0;
+  padding: 0;
   justify-content: flex-start;
-  padding-top: clamp(80px, 12vh, 130px);
-  scroll-snap-align: start;
+  display: block;
+  min-height: 100vh;
 }
+.proj-pin {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+.proj-section.is-horizontal .proj-pin { position: sticky; top: 0; }
+
 .proj-wrap { max-width: 1180px; }
+.proj-pin .proj-wrap { flex: none; padding-top: clamp(70px, 10vh, 110px); }
+.proj-pin .section-head { margin-bottom: 26px; }
 
-.proj-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 188px;
-  grid-auto-flow: dense;
-  gap: 14px;
+.proj-track {
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  /* Matches .wrap's gutter so the first card lines up under the heading. */
+  /* Left gutter matches .wrap so the first card sits under the heading; the
+     matching space on the right is .proj-rail-end. */
+  padding-left: max(24px, calc((100vw - 1180px) / 2 + 24px));
+  height: clamp(290px, 38vh, 360px);
+  will-change: transform;
 }
-.proj-grid-item { min-width: 0; height: 100%; }
-.proj-grid-item.c2 { grid-column: span 2; }
-.proj-grid-item.r2 { grid-row: span 2; }
-
-/* the feature tile carries a little more typographic weight, content centred */
-.proj-grid-item.feature .proj-card { justify-content: center; }
+.proj-grid-item {
+  flex: 0 0 auto;
+  width: 372px;
+  height: 100%;
+  min-width: 0;
+}
+.proj-grid-item.feature { width: 520px; }
+.proj-rail-end {
+  flex: 0 0 auto;
+  width: max(24px, calc((100vw - 1180px) / 2 + 24px));
+}
 .proj-grid-item.feature .proj-name { font-size: clamp(1.5rem, 2.3vw, 2rem); }
-.proj-grid-item.feature .proj-blurb { font-size: 0.98rem; -webkit-line-clamp: 4; margin-bottom: 16px; }
-.proj-grid-item.feature .proj-tags { margin-top: 0; }
-
-/* two columns on narrower viewports; feature stays full-width */
-@media (max-width: 1080px) {
-  .proj-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 178px;
-    grid-auto-flow: row;
-  }
-  .proj-grid-item.c2 { grid-column: span 1; }
-  .proj-grid-item.r2 { grid-row: span 1; }
-  .proj-grid-item.feature { grid-column: span 2; }
-}
-
-@media (max-width: 620px) {
-  .proj-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
-  .proj-grid-item,
-  .proj-grid-item.c2,
-  .proj-grid-item.feature { grid-column: span 1; height: auto; }
-  .proj-card { height: auto; }
-  /* full blurbs once cards flow at natural height */
-  .proj-grid-item .proj-blurb { -webkit-line-clamp: unset; display: block; overflow: visible; }
-}
+.proj-grid-item.feature .proj-blurb { font-size: 0.98rem; -webkit-line-clamp: 5; }
 
 .proj-card {
   position: relative;
@@ -209,7 +177,7 @@
   font: inherit;
   color: inherit;
   -webkit-appearance: none;
-  padding: 18px;
+  padding: 24px;
   overflow: hidden;
   transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, background 0.3s ease;
 }
@@ -225,25 +193,231 @@ button.proj-card.is-link { cursor: pointer; }
 }
 .proj-arrow { font-size: 1rem; color: var(--muted); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s ease; }
 .proj-card.is-link:hover .proj-arrow { transform: translate(5px,-5px); color: var(--accent); }
-.proj-card.is-link:hover .proj-name { color: var(--accent); }
 .proj-blurb {
   color: var(--muted);
-  margin: 7px 0 12px;
-  font-size: 0.85rem;
+  margin: 10px 0 14px;
+  font-size: 0.86rem;
+  line-height: 1.65;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.proj-grid-item.feature .proj-blurb { -webkit-line-clamp: 4; }
-/* single-cell tiles are short — keep the blurb to two lines so tags never clip */
-.proj-grid-item:not(.c2):not(.feature) .proj-blurb { -webkit-line-clamp: 2; }
 .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
 .proj-tag { font-size: 0.66rem; color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 3px 9px; }
 .proj-thumb-inline { display: none; }
 
+/* Hint that the section travels sideways. */
+.proj-pin::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 90px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(6,8,15,0), rgba(6,8,15,0.55));
+}
+.proj-section:not(.is-horizontal) .proj-pin::after { display: none; }
+
+/* Below the horizontal breakpoint the track becomes an ordinary stack. */
+@media (max-width: 899px) {
+  .proj-section { padding: 32px 0; }
+  .proj-pin { height: auto; overflow: visible; position: static; }
+  .proj-track {
+    flex-direction: column;
+    height: auto;
+    padding: 0 var(--pad);
+    gap: 14px;
+    transform: none !important;
+  }
+  .proj-grid-item,
+  .proj-grid-item.feature { width: 100%; height: auto; }
+  .proj-rail-end { display: none; }
+  .proj-card { height: auto; }
+  .proj-grid-item .proj-blurb { -webkit-line-clamp: unset; display: block; overflow: visible; }
+}
+
+/* ---------- EXPERIENCE (wide bars) ---------- */
+/* Same card language as the bento tiles so the two sections read as a set,
+   but stacked full-width: the list order is the timeline. */
+.exp-section {
+  padding: 32px 0;
+  /* seven bars overflow a viewport, so the centred/snapped defaults from
+     .section would fight the scroll rather than help it */
+  min-height: auto;
+  justify-content: flex-start;
+  padding-top: clamp(80px, 12vh, 130px);
+}
+.exp-wrap { max-width: 1180px; }
+
+.exp-list { display: flex; flex-direction: column; gap: 22px; }
+
+.exp-bar {
+  position: relative;
+  background: #12151b;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  /* generous, and asymmetric on the left to clear the accent rail */
+  padding: 28px 34px 30px 38px;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, background 0.3s ease;
+}
+/* Accent rail is always on — it's what stops a stack of plain rectangles from
+   reading as an undesigned list. Hover just brightens it. */
+.exp-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--accent);
+  opacity: 0.4;
+  transition: opacity 0.3s ease, width 0.3s ease;
+}
+.exp-bar:hover { transform: translateY(-3px); border-color: var(--accent); background: #161a21; }
+.exp-bar:hover::before { opacity: 1; width: 4px; }
+
+/* Company left, status pill pushed to the far right of the same line. */
+.exp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.exp-company {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+/* Seven animated gradient headings at once is noise. Keep them plain and let
+   the gradient be hover feedback instead. */
+.exp-bar:hover .exp-company {
+  background-image: linear-gradient(90deg, #00d4ff 0%, #b8b5ff 35%, #6fd9d6 100%);
+  background-size: 500% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hueShift 5s ease-in-out infinite alternate;
+}
+.exp-present {
+  flex: none;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(245,177,68,0.45);
+  background: rgba(245,177,68,0.08);
+  border-radius: 100px;
+  padding: 3px 10px;
+}
+.exp-role {
+  margin-top: 7px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  opacity: 0.92;
+}
+/* Hairline splits the identity block from the prose, which is most of what
+   makes these read as cards rather than paragraphs. */
+.exp-blurb {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.exp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 20px;
+}
+.exp-tag {
+  font-size: 0.66rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 4px 10px;
+}
+
+@media (max-width: 620px) {
+  .exp-list { gap: 16px; }
+  .exp-bar { padding: 22px 20px 24px 24px; }
+  .exp-head { gap: 10px; }
+  .exp-blurb { margin-top: 18px; padding-top: 18px; font-size: 0.84rem; line-height: 1.75; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* global.css zeroes durations; the transforms still need neutralising */
+  .exp-bar:hover { transform: none; }
+}
+
+/* ---------- WARP TRANSITION (projects -> experience) ---------- */
+/* 300vh of scroll, first viewport pinned: ~2 viewports of wheel go into the
+   flight. The pin is opaque so the Earth backdrop is left behind. */
+.warp { position: relative; height: 260vh; }
+/* The two book-end crossings are shorter — only the middle one is a long haul. */
+.warp-short { height: 190vh; }
+.warp-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+/* Separate layer so it can fade; see WarpTransition.jsx. */
+.warp-veil {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  will-change: opacity;
+}
+.warp-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.warp-copy {
+  position: relative;
+  text-align: center;
+  padding: 0 var(--pad);
+  will-change: transform, opacity, filter;
+}
+.warp-kicker {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.warp-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6.5vw, 4.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1.03;
+}
+
+@media (max-width: 860px) {
+  /* Less pinned travel on a phone, where scrolling is more effortful. */
+  .warp { height: 190vh; }
+  .warp-short { height: 150vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .warp, .warp-short { height: 100vh; }
+}
+
 /* ---------- TECH MARQUEE ---------- */
 .tech-section { padding-bottom: 80px; overflow: hidden; }
+/* Match the projects and experience columns so every section heading and
+   label on the page shares one left edge. */
+.tech-section .wrap { max-width: 1180px; }
 .tech-rows { display: flex; flex-direction: column; gap: 30px; margin-top: 6px; }
 .tech-cat {
   font-size: 0.72rem;
@@ -272,14 +446,13 @@ button.proj-card.is-link { cursor: pointer; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ---------- FOOTER ---------- */
-.footer { padding: 36px 0 56px; border-top: 1px solid var(--line); scroll-snap-align: end; }
+.footer { padding: 36px 0 56px; border-top: 1px solid var(--line); }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .footer-name { font-family: var(--font-display); font-weight: 500; }
 .footer-socials { display: flex; gap: 12px; }
 
 /* ---------- RESPONSIVE ---------- */
 @media (hover: none), (max-width: 720px) {
-  .cursor-preview { display: none; }
   .proj-thumb-inline {
     display: block;
     width: 100%;
@@ -363,6 +536,9 @@ button.proj-card.is-link { cursor: pointer; }
   background: rgba(255, 255, 255, 0.09);
 }
 .contrib-day.is-pad { background: none; }
+/* Dates that haven't arrived yet: still drawn, so the year keeps its shape,
+   but deadened so they don't read as "no contributions". */
+.contrib-day.is-future { background: rgba(255, 255, 255, 0.025); }
 .contrib-day.l1 { background: rgba(245, 177, 68, 0.3); }
 .contrib-day.l2 { background: rgba(245, 177, 68, 0.55); }
 .contrib-day.l3 { background: rgba(245, 177, 68, 0.78); }
