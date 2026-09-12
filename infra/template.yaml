@@ -68,22 +68,11 @@ Resources:
   # --- Contribution calendar origin -----------------------------------------
   ContribFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        Format: esm
-        Target: node22
-        Minify: true
-        Sourcemap: false
-        EntryPoints: [infra/lambda/contrib/index.mjs]
-        OutExtension: ['.js=.mjs']
-        # Provided by the managed Node 22 runtime; bundling it would only
-        # inflate the artefact.
-        External: ['@aws-sdk/*']
     Properties:
       FunctionName: !Sub '${AWS::StackName}-contrib'
-      # Repo root, so the bundler can follow the import into shared/.
-      CodeUri: ../
+      # Pre-bundled by infra/build.mjs; see the note there for why SAM's own
+      # esbuild build method is not used.
+      CodeUri: build/contrib/
       Handler: index.handler
       Environment:
         Variables:
@@ -104,19 +93,9 @@ Resources:
   # --- Usage counters --------------------------------------------------------
   EventsFunction:
     Type: AWS::Serverless::Function
-    Metadata:
-      BuildMethod: esbuild
-      BuildProperties:
-        Format: esm
-        Target: node22
-        Minify: true
-        Sourcemap: false
-        EntryPoints: [infra/lambda/events/index.mjs]
-        OutExtension: ['.js=.mjs']
-        External: ['@aws-sdk/*']
     Properties:
       FunctionName: !Sub '${AWS::StackName}-events'
-      CodeUri: ../
+      CodeUri: build/events/
       Handler: index.handler
       MemorySize: 128
       Timeout: 5

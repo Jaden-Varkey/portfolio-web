@@ -28,14 +28,12 @@ export const projects = [
     name: 'Nova-CUA',
     blurb: 'A JARVIS-like desktop agent that turns natural language into real actions on your computer.',
     tags: ['Python', 'LLMs', 'GUI Grounding', 'Docker'],
-    thumb: 'nova1.png',
   },
   {
     slug: 'boilersub',
     name: 'BoilerSub',
     blurb: 'A gated, Purdue-only subleasing marketplace — verified, structured, on-platform.',
     tags: ['Supabase', 'TypeScript', 'OTP Auth', 'PostgreSQL'],
-    thumb: 'boilersub2.png',
   },
   {
     slug: 'ghostdrop',
@@ -99,6 +97,7 @@ export const techStack = [
       { key: 'github', label: 'GitHub' },
       { key: 'copilot', label: 'GitHub Copilot' },
       { key: 'docker', label: 'Docker' },
+      { key: 'kubernetes', label: 'Kubernetes' },
       { key: 'azure', label: 'Microsoft Azure', file: 'azure.png' },
       { key: 'databricks', label: 'Databricks', file: 'databricks.png' },
       { key: 'postman', label: 'Postman' },
@@ -124,7 +123,7 @@ export const experience = [
     company: 'Cummins',
     role: 'Data Science Researcher',
     present: true,
-    blurb: 'Developing an Agentic AI Platform Advisor to optimize Databricks and Spark data workloads. Building a closed-loop orchestration engine combining LLM reasoning, RAG, and PySpark on Azure to analyze cluster logs and dynamically generate CI/CD test pipelines.',
+    blurb: 'Developing an Agentic AI Platform Advisor to optimize Spark job workloads using Databricks. Building a closed-loop orchestration engine combining LLM reasoning, RAG, and PySpark on Azure to analyze cluster logs and dynamically generate CI/CD test pipelines.',
     tags: ['Databricks', 'PySpark', 'Azure', 'LLMs', 'RAG', 'CI/CD'],
   },
   {

@@ -10,3 +10,5 @@ dist
 .wrangler
 .dev.vars
 .env*
+infra/build
+infra/.aws-sam
