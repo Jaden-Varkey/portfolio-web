@@ -97,7 +97,7 @@ export const techStack = [
       { key: 'github', label: 'GitHub' },
       { key: 'copilot', label: 'GitHub Copilot' },
       { key: 'docker', label: 'Docker' },
-      { key: 'kubernetes', label: 'Kubernetes' },
+      { key: 'kubernetes', label: 'Kubernetes', file: 'kubernetes.png' },
       { key: 'azure', label: 'Microsoft Azure', file: 'azure.png' },
       { key: 'databricks', label: 'Databricks', file: 'databricks.png' },
       { key: 'postman', label: 'Postman' },
