@@ -26,6 +26,10 @@ const LEAD_OUT = 340
 export default function Projects() {
   const [active, setActive] = useState(null)
   const [openSlug, setOpenSlug] = useState(null)
+  // The clicked card's rectangle, so the dossier can rise out of it rather
+  // than arrive from nowhere. Captured at click time — by the time the modal
+  // has mounted, the page is locked and the card may be under the overlay.
+  const [origin, setOrigin] = useState(null)
   const [overflow, setOverflow] = useState(0)
   const [horizontal, setHorizontal] = useState(false)
 
@@ -47,6 +51,34 @@ export default function Projects() {
     if (trackRef.current) ro.observe(trackRef.current)
     return () => { window.removeEventListener('resize', measure); ro.disconnect() }
   }, [])
+
+  // The rail invites a sideways gesture and then ignored it: travel is driven
+  // by vertical scroll, so a trackpad swipe, a shift+wheel or a tilt wheel did
+  // nothing at all. Translate that intent back into the vertical scroll that
+  // actually moves the track — one pixel of sideways gesture is one pixel of
+  // sideways travel, the same rate the wheel gets, and past the last card it
+  // keeps going and releases the section like any other scroll.
+  useEffect(() => {
+    if (!horizontal || overflow <= 0) return
+    const el = sectionRef.current
+    if (!el) return
+
+    const onWheel = (e) => {
+      if (openSlug) return // the dossier owns the page while it's up
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
+      const r = el.getBoundingClientRect()
+      // Only while the section actually holds the screen; outside that a
+      // sideways swipe is not asking for this.
+      if (r.top > 1 || r.bottom < window.innerHeight - 1) return
+      e.preventDefault()
+      // Explicitly instant: the stylesheet sets scroll-behavior: smooth, and
+      // the shorthand form would inherit it and animate every wheel tick.
+      window.scrollBy({ top: e.deltaX, left: 0, behavior: 'instant' })
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [horizontal, overflow, openSlug])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -87,7 +119,14 @@ export default function Projects() {
           {projects.map((p, i) => {
             const Card = p.slug ? 'button' : 'div'
             const cardProps = p.slug
-              ? { type: 'button', onClick: () => setOpenSlug(p.slug) }
+              ? {
+                  type: 'button',
+                  onClick: (e) => {
+                    const r = e.currentTarget.getBoundingClientRect()
+                    setOrigin({ left: r.left, top: r.top, width: r.width, height: r.height })
+                    setOpenSlug(p.slug)
+                  },
+                }
               : {}
             return (
               <motion.div
@@ -139,7 +178,7 @@ export default function Projects() {
         )}
       </AnimatePresence>
 
-      <ProjectModal slug={openSlug} onClose={() => setOpenSlug(null)} />
+      <ProjectModal slug={openSlug} origin={origin} onClose={() => setOpenSlug(null)} />
     </section>
   )
 }

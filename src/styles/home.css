@@ -360,8 +360,13 @@ button.proj-card.is-link { cursor: pointer; }
 }
 
 /* ---------- WARP TRANSITION (projects -> experience) ---------- */
-/* 300vh of scroll, first viewport pinned: ~2 viewports of wheel go into the
-   flight. The pin is opaque so the Earth backdrop is left behind. */
+/* First viewport pinned, so the remainder is wheel travel spent in flight. The
+   pin is opaque, so the Earth backdrop is left behind.
+
+   The crossings are normally flown rather than scrolled now
+   (lib/warpFlight.js), and the height is what sets the flight's distance, which
+   in turn sets how long the flight lasts. Cutting these down made the crossings
+   noticeably too quick, so they are back at full length. */
 .warp { position: relative; height: 260vh; }
 /* The two book-end crossings are shorter — only the middle one is a long haul. */
 .warp-short { height: 190vh; }
@@ -405,7 +410,8 @@ button.proj-card.is-link { cursor: pointer; }
 }
 
 @media (max-width: 860px) {
-  /* Less pinned travel on a phone, where scrolling is more effortful. */
+  /* Less pinned travel on a phone, where scrolling is more effortful and the
+     flight controller stays out of it. */
   .warp { height: 190vh; }
   .warp-short { height: 150vh; }
 }

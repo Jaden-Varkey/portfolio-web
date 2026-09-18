@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react'
+import { registerWarp } from '../lib/warpFlight.js'
 
 // Scroll-driven warp between Projects and Experience.
 //
@@ -62,6 +63,11 @@ export default function WarpTransition({ kicker, title, accent, intensity = 1, c
     progressRef.current = scrollYProgress.get()
     return unsub
   }, [scrollYProgress])
+
+  // Hand the crossing to the flight controller: entering it with any momentum
+  // carries the reader the rest of the way rather than stranding them inside a
+  // section with nothing in it. See lib/warpFlight.js.
+  useEffect(() => registerWarp(sectionRef.current), [])
 
   useEffect(() => {
     const canvas = canvasRef.current

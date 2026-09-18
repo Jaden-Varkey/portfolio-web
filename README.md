@@ -139,7 +139,8 @@ src/
   styles/           global, home, detail CSS
   components/       Hero, Projects, Experience, TechStack, Footer, Background,
                     Cursor, FloatingNav, PageIntro, ContribGraph, LogoTile
-  lib/              contributions (client loader), telemetry, asset
+  lib/              contributions (client loader), telemetry, asset,
+                    warpFlight (auto-scroll through the warp crossings)
   pages/            Home, ProjectDetail
 api/                Vercel serverless functions (contributions, event)
 functions/api/      Cloudflare Pages Functions — same two, Workers signature

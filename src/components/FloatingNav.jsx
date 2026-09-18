@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { suspendWarpFlight } from '../lib/warpFlight.js'
 
 const items = [
   { id: 'home', label: 'Home' },
@@ -22,7 +23,11 @@ export default function FloatingNav() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // A nav jump crosses the warps at speed, which is exactly what arms their
+  // auto-flight — without this the first crossing on the way would catch the
+  // jump and drop the reader there instead of at the section they asked for.
   const go = (id) => {
+    suspendWarpFlight()
     if (id === 'home') {
       home()
       return
