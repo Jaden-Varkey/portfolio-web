@@ -18,6 +18,12 @@ export const projects = [
     tags: ['Python', 'FastAPI', 'PyTorch', 'Ollama'],
   },
   {
+    slug: 'http-server',
+    name: 'HTTP/1.1 Server',
+    blurb: 'A C++20 HTTP/1.1 static file server for Linux.',
+    tags: ['C++20', 'Linux', 'epoll', 'Make'],
+  },
+  {
     slug: 'lexvecta',
     name: 'LexVecta',
     blurb: 'Closed-domain hybrid RAG pipeline for corporate tax verification.',
@@ -268,6 +274,22 @@ export const projectDetails = {
       { title: 'High recall sanitization', body: 'Achieves ≥93% recall in finding and removing PII exposure.' },
       { title: 'Semantic fidelity', body: 'Retains ≥85% of the original prompt meaning after sanitization.' },
       { title: 'Local LLM integration', body: 'Built to work seamlessly with Ollama.' },
+    ],
+  },
+  'http-server': {
+    name: 'HTTP/1.1 Server',
+    subtitle: 'C++20 Static File Server for Linux',
+    meta: ['C++20', 'Linux', 'epoll', 'sendfile', 'openat2', 'Make', 'Sanitizers'],
+    images: [],
+    links: [
+      { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/http-server' },
+    ],
+    lead: 'A small, fast HTTP/1.1 static file server where each worker thread runs its own lock-free epoll loop on its own SO_REUSEPORT listener.',
+    sections: [],
+    features: [
+      { title: 'Keep-alive & pipelining', body: 'Persistent, pipelined connections on a fixed 16 KiB buffer per connection, with sendfile for large files.' },
+      { title: 'Traversal-safe paths', body: 'Files resolve through openat2(RESOLVE_BENEATH), plus idle and slow-client timeouts and clean shutdown with stats.' },
+      { title: 'Sanitized CI', body: '22 tests run in CI under g++ and clang++ with ASan, UBSan, and TSan.' },
     ],
   },
   'lexvecta': {
