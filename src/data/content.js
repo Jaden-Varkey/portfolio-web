@@ -24,6 +24,18 @@ export const projects = [
     tags: ['C++20', 'Linux', 'epoll', 'Make'],
   },
   {
+    slug: 'haven',
+    name: 'Haven',
+    blurb: 'A silent SOS for Even G2 smart glasses — one press texts your contacts your location and starts recording.',
+    tags: ['TypeScript', 'Node.js', 'SQLite', 'Photon'],
+  },
+  {
+    slug: 'onboarding-buddy',
+    name: 'Onboarding Buddy',
+    blurb: 'An open-source RAG chatbot that onboards newcomers to any GitHub repo with cited answers.',
+    tags: ['Python', 'Snowflake Cortex', 'Llama 3.3', 'Streamlit'],
+  },
+  {
     slug: 'lexvecta',
     name: 'LexVecta',
     blurb: 'Closed-domain hybrid RAG pipeline for corporate tax verification.',
@@ -290,6 +302,40 @@ export const projectDetails = {
       { title: 'Keep-alive & pipelining', body: 'Persistent, pipelined connections on a fixed 16 KiB buffer per connection, with sendfile for large files.' },
       { title: 'Traversal-safe paths', body: 'Files resolve through openat2(RESOLVE_BENEATH), plus idle and slow-client timeouts and clean shutdown with stats.' },
       { title: 'Sanitized CI', body: '22 tests run in CI under g++ and clang++ with ASan, UBSan, and TSan.' },
+    ],
+  },
+  haven: {
+    name: 'Haven',
+    subtitle: 'Hands-Free SOS for Smart Glasses · LA Hacks 2026',
+    meta: ['TypeScript', 'Even Hub SDK', 'Hono', 'Node.js', 'SQLite', 'Zod', 'Photon', 'Gemini'],
+    images: [],
+    links: [
+      { label: 'View on Devpost', href: 'https://devpost.com/software/haven-adhgbe' },
+      { label: 'View on GitHub', href: 'https://github.com/ayaanma/haven' },
+    ],
+    lead: 'One press on your glasses texts your people where you are and starts recording — your phone never leaves your pocket.',
+    sections: [],
+    features: [
+      { title: 'Zero duplicate alerts', body: 'Idempotency keys, a crash-safe outbox, and webhook dedupe mean a retried SOS never double-texts anyone.' },
+      { title: 'AI off the critical path', body: 'The first alert goes out before Gemini runs; AI context follows async with a timeout and fallback.' },
+      { title: 'Built to parallelize', body: 'A Zod-typed TypeScript monorepo let a team of 4 ship in parallel, gated by 356 Vitest tests.' },
+    ],
+  },
+  'onboarding-buddy': {
+    name: 'Onboarding Buddy',
+    subtitle: 'RAG Onboarding for Any GitHub Repo · Hack Day 2026',
+    meta: ['Python', 'Snowflake Cortex', 'Llama 3.3', 'Streamlit', 'SQL', 'GitHub API'],
+    images: [],
+    links: [
+      { label: 'Try it Live', href: 'https://onboarding-buddy-ebon.vercel.app' },
+      { label: 'View on GitHub', href: 'https://github.com/Jaden-Varkey/onboarding-buddy' },
+    ],
+    lead: "Point it at a GitHub repo and ask how things work — it answers from the repo's own docs and issues, with citations.",
+    sections: [],
+    features: [
+      { title: 'Hybrid retrieval', body: 'Vector + keyword Cortex Search over 190+ doc and issue chunks, with cited answers in under 10s.' },
+      { title: '2× faster queries', body: 'Repo-health queries on Snowflake Marketplace data cut from 23.2s to 11.0s via MAX_BY scan pruning.' },
+      { title: 'Open source', body: 'MIT-licensed and runs on Snowflake Cortex with Llama 3.3.' },
     ],
   },
   'lexvecta': {
