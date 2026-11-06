@@ -5,8 +5,10 @@
 // repeatedly costs nothing. The request is fired on first hover intent rather
 // than at boot, keeping it off the critical path.
 
+import { BASENAME } from './basePath.js'
+
 const YEAR = new Date().getFullYear()
-const ENDPOINT = `/api/contributions?year=${YEAR}`
+const ENDPOINT = `${BASENAME}/api/contributions?year=${YEAR}`
 // Used when the serverless function isn't reachable (e.g. a static-only host).
 const FALLBACK = `https://github-contributions-api.jogruber.de/v4/Jaden-Varkey?y=${YEAR}`
 

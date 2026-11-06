@@ -28,9 +28,13 @@ function contributionsApi() {
   }
 }
 
-// base: '/' for clean URLs with BrowserRouter on Cloudflare Pages (domain root).
+// Production builds load assets from the absolute deployment origin so the page
+// also works when proxied under a sub-path (www.cs.purdue.edu/homes/varkey/),
+// where root-relative /assets/... would hit Purdue's server instead of ours.
 // Asset references use import.meta.env.BASE_URL so deep routes resolve correctly.
+const PROD_ORIGIN = 'https://portfolio-web-mu-sable.vercel.app/'
+
 export default defineConfig({
   plugins: [react(), contributionsApi()],
-  base: '/',
+  base: process.env.VERCEL_ENV === 'production' ? PROD_ORIGIN : '/',
 })

@@ -8,7 +8,9 @@
 // sendBeacon so it never blocks navigation, never delays paint, and survives
 // the page being closed mid-request.
 
-const ENDPOINT = '/api/event'
+import { BASENAME } from './basePath.js'
+
+const ENDPOINT = `${BASENAME}/api/event`
 
 const enabled = () =>
   typeof navigator !== 'undefined' &&

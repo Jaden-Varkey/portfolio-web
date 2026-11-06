@@ -6,10 +6,11 @@ import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import './styles/global.css'
 import App from './App.jsx'
+import { BASENAME } from './lib/basePath.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={BASENAME || undefined}>
       <App />
     </BrowserRouter>
   </React.StrictMode>,
