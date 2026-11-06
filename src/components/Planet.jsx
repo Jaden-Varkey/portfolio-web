@@ -243,6 +243,9 @@ export default function Planet({ scrollRef, departRef, onReady, onLost }) {
     let hasRock = false
 
     const img = new Image()
+    // Assets come from the deployment origin even when proxied, so request CORS
+    // or WebGL refuses the cross-origin pixels.
+    img.crossOrigin = 'anonymous'
     img.onload = () => {
       gl.activeTexture(gl.TEXTURE0)
       gl.bindTexture(gl.TEXTURE_2D, tex)
