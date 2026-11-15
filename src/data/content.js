@@ -26,7 +26,7 @@ export const projects = [
   {
     slug: 'haven',
     name: 'Haven',
-    blurb: 'A silent SOS for Even G2 smart glasses — one press texts your contacts your location and starts recording.',
+    blurb: 'Personal safety application built for the Even Realities G2 smart glasses. Built for LA Hacks 2026 (UCLA).',
     tags: ['TypeScript', 'Node.js', 'SQLite', 'Photon'],
   },
   {
@@ -44,7 +44,7 @@ export const projects = [
   {
     slug: 'nova-cua',
     name: 'Nova-CUA',
-    blurb: 'A JARVIS-like desktop agent that turns natural language into real actions on your computer.',
+    blurb: 'A JARVIS-like desktop agent that turns natural language into real actions on your computer. Built for Hello World 2025 Hackathon (Purdue).',
     tags: ['Python', 'LLMs', 'GUI Grounding', 'Docker'],
   },
   {
