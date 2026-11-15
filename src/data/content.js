@@ -192,7 +192,9 @@ export const projectDetails = {
     subtitle: 'Expert-Reasoning Fine-Tuning for Vision-Language Models',
     meta: ['Python', 'PyTorch', 'Transformers', 'PEFT / LoRA', 'Qwen3-VL', 'CUDA'],
     images: [],
-    links: [],
+    links: [
+      { label: 'View on GitHub', href: 'https://github.com/prathamkelkar/vlm-training' },
+    ],
     lead: 'Teaching a 2B vision-language model to reason like an expert about first-person video — trained and served on an 8 GB laptop GPU.',
     sections: [],
     features: [
