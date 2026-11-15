@@ -105,6 +105,7 @@ export const techStack = [
       { key: 'ollama', label: 'Ollama' },
       { key: 'nomic', label: 'Nomic' },
       { key: 'redis', label: 'Redis' },
+      { key: 'clickhouse', label: 'ClickHouse' },
     ],
   },
   {
@@ -125,6 +126,8 @@ export const techStack = [
       { key: 'azure', label: 'Microsoft Azure', file: 'azure.png' },
       { key: 'databricks', label: 'Databricks', file: 'databricks.png' },
       { key: 'postman', label: 'Postman' },
+      { key: 'jest', label: 'Jest' },
+      { key: 'k6', label: 'k6' },
       { key: 'vercel', label: 'Vercel', file: 'vercel.png' },
       { key: 'claude', label: 'Claude' },
       { key: 'antigravity', label: 'Antigravity' },
