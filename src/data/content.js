@@ -12,10 +12,10 @@ export const profile = {
 
 export const projects = [
   {
-    slug: 'redact-ai',
-    name: 'Redact AI',
-    blurb: 'Developer tool that redacts sensitive PII data from LLM prompts.',
-    tags: ['Python', 'FastAPI', 'PyTorch', 'Ollama'],
+    slug: 'vlm-training',
+    name: 'VLM Training and Inference',
+    blurb: 'LoRA fine-tuning of Qwen3-VL-2B to answer expert-reasoning questions about egocentric video, on an 8 GB laptop GPU.',
+    tags: ['Python', 'PyTorch', 'Hugging Face', 'LoRA'],
   },
   {
     slug: 'http-server',
@@ -36,16 +36,22 @@ export const projects = [
     tags: ['Python', 'Snowflake Cortex', 'Llama 3.3', 'Streamlit'],
   },
   {
-    slug: 'lexvecta',
-    name: 'LexVecta',
-    blurb: 'Closed-domain hybrid RAG pipeline for corporate tax verification.',
-    tags: ['Python', 'Streamlit', 'ChromaDB', 'SQLite'],
+    slug: 'redact-ai',
+    name: 'Redact AI',
+    blurb: 'Developer tool that redacts sensitive PII data from LLM prompts.',
+    tags: ['Python', 'FastAPI', 'PyTorch', 'Ollama'],
   },
   {
     slug: 'nova-cua',
     name: 'Nova-CUA',
     blurb: 'A JARVIS-like desktop agent that turns natural language into real actions on your computer.',
     tags: ['Python', 'LLMs', 'GUI Grounding', 'Docker'],
+  },
+  {
+    slug: 'lexvecta',
+    name: 'LexVecta',
+    blurb: 'Closed-domain hybrid RAG pipeline for corporate tax verification.',
+    tags: ['Python', 'Streamlit', 'ChromaDB', 'SQLite'],
   },
   {
     slug: 'boilersub',
@@ -134,25 +140,25 @@ export const experience = [
     company: 'Purdue University',
     role: 'Teaching Assistant — CS 252 Systems Programming',
     present: true,
-    blurb: 'Hosted weekly lab sections with 20+ students and office hours for 400+ students on systems programming in C/C++, Linux, operating systems, concurrency, memory management, and networking.',
+    blurb: 'Directed weekly lab sections with 20+ students and office hours for 400+ students on systems programming in C/C++, Linux, operating systems, concurrency, memory management, and networking.',
     tags: ['C', 'C++', 'Linux', 'Concurrency', 'Networking'],
   },
   {
     company: 'Cummins',
-    role: 'Data Science Researcher',
+    role: 'Lead Software Engineering Researcher',
     present: true,
-    blurb: 'Developing an Agentic AI Platform Advisor to optimize Spark job workloads using Databricks. Building a closed-loop orchestration engine combining LLM reasoning, RAG, and PySpark on Azure to analyze cluster logs and dynamically generate CI/CD test pipelines.',
+    blurb: 'Led an 8-person team to ship an agentic AI platform advisor to cut manual QA effort and compute costs. Built a closed-loop orchestration engine combining LLM reasoning, RAG, and PySpark on Azure to analyze cluster logs and dynamically generate CI/CD test pipelines.',
     tags: ['Databricks', 'PySpark', 'Azure', 'LLMs', 'RAG', 'CI/CD'],
   },
   {
     company: 'M-Assist CRM',
     role: 'Software Engineering Intern',
-    blurb: 'Integrated third-party client REST APIs and shipped JWT-secured ASP.NET Core MVC for an enterprise CRM serving 400+ clients. Engineered a Knowledge Base-driven ELT engine to migrate legacy SQL Server reports to ClickHouse, reducing runtimes for SPs and report queries.',
+    blurb: 'Engineered a Knowledge Base-driven ELT engine to migrate legacy SQL Server reports to ClickHouse, cutting runtimes for SPs and report queries. Integrated third-party client REST APIs and shipped JWT-secured ASP.NET Core MVC for an enterprise CRM serving 400+ clients.',
     tags: ['ASP.NET Core', 'JWT', 'SQL Server', 'ClickHouse', 'REST'],
   },
   {
     company: 'Dekalb Capital Management LLC',
-    role: 'Software Engineering Contract',
+    role: 'Software Engineer (Contract)',
     blurb: 'Shipped an asynchronous REST polling engine with Ironbeam API routing designed to price options contracts through optimized low-latency Black-76 NumPy vectorizations. Deployed a React-based telemetry dashboard for real-time risk visualization and system monitoring.',
     tags: ['Python', 'NumPy', 'React', 'REST', 'Ironbeam API'],
   },
@@ -178,6 +184,20 @@ export const experience = [
 
 // Long-form copy for the two project detail pages.
 export const projectDetails = {
+  'vlm-training': {
+    name: 'VLM Training and Inference',
+    subtitle: 'Expert-Reasoning Fine-Tuning for Vision-Language Models',
+    meta: ['Python', 'PyTorch', 'Transformers', 'PEFT / LoRA', 'Qwen3-VL', 'CUDA'],
+    images: [],
+    links: [],
+    lead: 'Teaching a 2B vision-language model to reason like an expert about first-person video — trained and served on an 8 GB laptop GPU.',
+    sections: [],
+    features: [
+      { title: 'LoRA on 8 GB', body: 'Rank-16 adapters on the language model’s attention and MLP layers, with the vision encoder frozen.' },
+      { title: 'Controlled ablations', body: 'Zero-shot vs. answer-only vs. answer + expert-rationale arms, run on identical settings.' },
+      { title: 'Blind-control eval', body: 'A–E probability scoring with a no-video control to prove the model actually uses the frames.' },
+    ],
+  },
   ghostdrop: {
     name: 'GhostDrop',
     subtitle: 'Zero-Knowledge, Self-Destructing Secret Sharing',
